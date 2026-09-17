@@ -25,5 +25,8 @@ class Experience extends Model
     public function positionType() { return $this->belongsTo(PositionType::class, 'id_position_type'); }
     public function workType() { return $this->belongsTo(WorkType::class, 'id_work_type'); }
     public function user() { return $this->belongsTo(User::class, 'id_user'); }
-    public function project() { return $this->belongsTo(Project::class, 'id_project'); }
+    public function project() 
+    { 
+        return $this->belongsTo(Project::class, 'id_project'); 
+    }
 }

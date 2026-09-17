@@ -145,6 +145,11 @@ const router = createRouter({
         title: 'Signup',
       },
     },
+    {
+      path: '/stack',
+      name: 'Stack',
+      component: () => import('../views/Management/Stack/Stack.vue'),
+    },
   ],
 })
 

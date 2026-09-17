@@ -12,39 +12,39 @@ class StackSeeder extends Seeder
         $stacks = [
             [
                 'nama' => 'Laravel',
-                'tag' => 'laravel',
+                'tag' => 'Web Framework',
             ],
             [
                 'nama' => 'Vue.js',
-                'tag' => 'vue',
+                'tag' => 'Web Framework',
             ],
             [
                 'nama' => 'React',
-                'tag' => 'react',
+                'tag' => 'Web Framework',
             ],
             [
                 'nama' => 'PHP',
-                'tag' => 'php',
+                'tag' => 'Programming Language',
             ],
             [
                 'nama' => 'JavaScript',
-                'tag' => 'javascript',
+                'tag' => 'Programming Language',
             ],
             [
                 'nama' => 'C#',
-                'tag' => 'csharp',
+                'tag' => 'Programming Language',
             ],
             [
                 'nama' => 'Unity',
-                'tag' => 'unity',
+                'tag' => 'Game Engine',
             ],
             [
                 'nama' => 'Unreal Engine',
-                'tag' => 'unreal',
+                'tag' => 'Game Engine',
             ],
             [
                 'nama' => 'MySQL',
-                'tag' => 'mysql',
+                'tag' => 'Database',
             ],
         ];
 

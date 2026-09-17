@@ -239,6 +239,24 @@ const route = useRoute();
 const { isExpanded, isMobileOpen, isHovered, openSubmenu } = useSidebar();
 
 const menuGroups = [
+    {
+    title: "Management",
+    items: [
+      {
+        icon: TableIcon,
+        name: "Management",
+        subItems: [
+          { name: "User", path: "/users", pro: false },
+          { name: "Education", path: "/educations", pro: false },
+          { name: "Work", path: "/works", pro: false },
+          { name: "Experience", path: "/experiences", pro: false },
+          { name: "Project", path: "/projects", pro: false },
+          { name: "Achievement", path: "/achievements", pro: false },
+          { name: "Stack", path: "/stack", pro: false },
+        ],
+      },
+    ],
+  },
   {
     title: "Menu",
     items: [
@@ -280,6 +298,7 @@ const menuGroups = [
       },
     ],
   },
+
   {
     title: "Others",
     items: [
