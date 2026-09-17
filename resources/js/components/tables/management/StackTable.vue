@@ -8,6 +8,12 @@
           <tr class="border-b border-gray-200 dark:border-gray-700">
             <th class="px-5 py-3 text-left sm:px-6">
               <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                No
+              </p>
+            </th>
+            
+            <th class="px-5 py-3 text-left sm:px-6">
+              <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
                 Name
               </p>
             </th>
@@ -15,6 +21,11 @@
             <th class="px-5 py-3 text-left sm:px-6">
               <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
                 Tag
+              </p>
+            </th>
+            <th class="px-5 py-3 text-left sm:px-6">
+              <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                Action
               </p>
             </th>
           </tr>
@@ -28,6 +39,11 @@
           >
             <td class="px-5 py-4 sm:px-6">
               <p class="font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                {{ stacks.indexOf(stack) + 1 }}
+              </p>
+            </td>
+            <td class="px-5 py-4 sm:px-6">
+              <p class="font-medium text-gray-800 text-theme-sm dark:text-white/90">
                 {{ stack.nama }}
               </p>
             </td>
@@ -36,6 +52,12 @@
               <p class="text-gray-500 text-theme-sm dark:text-gray-400">
                 {{ stack.tag }}
               </p>
+            </td>
+            <td class="px-5 py-4 sm:px-6">
+              <div class="flex items-center gap-2">
+                <Button size="sm" variant="primary"> Edit </Button>
+                <Button size="sm" variant="primary"> Delete </Button>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -47,6 +69,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
+import Button from '@/components/ui/Button.vue'
 
 const stacks = ref([]);
 
