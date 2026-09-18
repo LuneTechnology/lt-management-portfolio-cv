@@ -11,7 +11,10 @@ return new class extends Migration
         Schema::create('stack', function (Blueprint $table) {
             $table->id('id_stack');
             $table->string('nama');
-            $table->string('tag', 50);
+
+            $table->foreignId('id_tag')
+                ->constrained('tag', 'id_tag')
+                ->restrictOnDelete();
         });
     }
 

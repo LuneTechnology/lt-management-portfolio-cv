@@ -155,6 +155,11 @@ const router = createRouter({
       name: 'Category',
       component: () => import('../views/Management/Category/Category.vue'),
     },
+    {
+      path: '/tags',
+      name: 'Tags',
+      component: () => import('../views/Management/Tag/Tag.vue'),
+    },
   ],
 })
 

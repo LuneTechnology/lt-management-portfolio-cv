@@ -41,7 +41,7 @@ const categories = ref([]);
 const getCategories = async () => {
   const response = await axios.get("/api/category");
 
-  categories.value = response.data.data;
+  categories.value = response.data;
 };
 
 onMounted(() => {

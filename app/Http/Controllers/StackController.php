@@ -10,7 +10,7 @@ class StackController extends Controller
     public function index()
     {
         return response()->json(
-            Stack::with('experiences')->get()
+            Stack::with('tag')->get()
         );
     }
 
@@ -18,18 +18,21 @@ class StackController extends Controller
     {
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
-            'tag' => 'required|string|max:50',
+            'id_tag' => 'required|integer|exists:tag,id_tag',
         ]);
 
         $stack = Stack::create($validated);
 
-        return response()->json($stack, 201);
+        return response()->json(
+            $stack->load('tag'),
+            201
+        );
     }
 
     public function show(Stack $stack)
     {
         return response()->json(
-            $stack->load('experiences')
+            $stack->load(['tag', 'experiences'])
         );
     }
 
@@ -37,12 +40,14 @@ class StackController extends Controller
     {
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
-            'tag' => 'required|string|max:50',
+            'id_tag' => 'required|integer|exists:tag,id_tag',
         ]);
 
         $stack->update($validated);
 
-        return response()->json($stack);
+        return response()->json(
+            $stack->load('tag')
+        );
     }
 
     public function destroy(Stack $stack)

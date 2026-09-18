@@ -20,11 +20,6 @@
 
             <th class="px-5 py-3 text-left sm:px-6">
               <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                Tag
-              </p>
-            </th>
-            <th class="px-5 py-3 text-left sm:px-6">
-              <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
                 Action
               </p>
             </th>
@@ -33,26 +28,21 @@
 
         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
           <tr
-            v-for="stack in stacks"
-            :key="stack.id_stack"
+            v-for="tag in tags"
+            :key="tag.id"
             class="border-t border-gray-100 dark:border-gray-800"
           >
             <td class="px-5 py-4 sm:px-6">
               <p class="font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                {{ stacks.indexOf(stack) + 1 }}
+                {{ tags.indexOf(tag) + 1 }}
               </p>
             </td>
             <td class="px-5 py-4 sm:px-6">
               <p class="font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                {{ stack.nama }}
+                {{ tag.name }}
               </p>
             </td>
 
-            <td class="px-5 py-4 sm:px-6">
-              <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                {{ stack.tag.name }}
-              </p>
-            </td>
             <td class="px-5 py-4 sm:px-6">
               <div class="flex items-center gap-2">
                 <Button size="sm" variant="primary"> Edit </Button>
@@ -71,15 +61,15 @@ import { ref, onMounted } from "vue";
 import axios from "axios";
 import Button from '@/components/ui/Button.vue'
 
-const stacks = ref([]);
+const tags = ref([]);
 
-const getStacks = async () => {
-  const response = await axios.get("/api/stacks");
+const getTags = async () => {
+  const response = await axios.get("/api/tags");
 
-  stacks.value = response.data;
+  tags.value = response.data;
 };
 
 onMounted(() => {
-  getStacks();
+  getTags();
 });
 </script>

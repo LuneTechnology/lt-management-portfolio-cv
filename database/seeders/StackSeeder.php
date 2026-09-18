@@ -12,44 +12,47 @@ class StackSeeder extends Seeder
         $stacks = [
             [
                 'nama' => 'Laravel',
-                'tag' => 'Web Framework',
+                'id_tag' => 3,
             ],
             [
                 'nama' => 'Vue.js',
-                'tag' => 'Web Framework',
+                'id_tag' => 2,
             ],
             [
                 'nama' => 'React',
-                'tag' => 'Web Framework',
+                'id_tag' => 2,
             ],
             [
                 'nama' => 'PHP',
-                'tag' => 'Programming Language',
+                'id_tag' => 1,
             ],
             [
                 'nama' => 'JavaScript',
-                'tag' => 'Programming Language',
+                'id_tag' => 1,
             ],
             [
                 'nama' => 'C#',
-                'tag' => 'Programming Language',
+                'id_tag' => 1,
             ],
             [
                 'nama' => 'Unity',
-                'tag' => 'Game Engine',
+                'id_tag' => 4,
             ],
             [
                 'nama' => 'Unreal Engine',
-                'tag' => 'Game Engine',
+                'id_tag' => 4,
             ],
             [
                 'nama' => 'MySQL',
-                'tag' => 'Database',
+                'id_tag' => 5,
             ],
         ];
 
         foreach ($stacks as $stack) {
-            Stack::create($stack);
+            Stack::firstOrCreate(
+                ['nama' => $stack['nama']],
+                ['id_tag' => $stack['id_tag']]
+            );
         }
     }
 }

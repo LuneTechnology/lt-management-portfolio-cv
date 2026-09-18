@@ -3,20 +3,29 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Stack extends Model
 {
     protected $table = 'stack';
-
     protected $primaryKey = 'id_stack';
 
     public $timestamps = false;
 
     protected $fillable = [
         'nama',
-        'tag',
+        'id_tag',
     ];
+
+    public function tag(): BelongsTo
+    {
+        return $this->belongsTo(
+            Tag::class,
+            'id_tag',
+            'id_tag'
+        );
+    }
 
     public function experiences(): BelongsToMany
     {
