@@ -160,6 +160,14 @@ const router = createRouter({
       name: 'Tags',
       component: () => import('../views/Management/Tag/Tag.vue'),
     },
+    {
+      path: '/experiences',
+      name: 'Experience',
+      component: () => import('../views/Management/Stack/Experience.vue'),
+      meta: {
+        title: 'Experience Management',
+      },
+    },
   ],
 })
 
