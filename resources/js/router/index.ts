@@ -167,7 +167,15 @@ const router = createRouter({
     {
       path: '/experiences',
       name: 'Experience',
-      component: () => import('../views/Management/Stack/Experience.vue'),
+      component: () => import('../views/Management/Experience/Experience.vue'),
+      meta: {
+        title: 'Experience Management',
+      },
+    },
+    {
+      path: '/Works',
+      name: 'Work',
+      component: () => import('../views/Management/Work/Work.vue'),
       meta: {
         title: 'Experience Management',
       },

@@ -3,8 +3,8 @@
     <PageBreadcrumb :pageTitle="currentPageTitle" />
 
     <div class="space-y-5 sm:space-y-6">
-      <ComponentCard title="User">
-        <UserTable />
+      <ComponentCard :title="currentPageTitle">
+        <WorkTable />
       </ComponentCard>
     </div>
   </AdminLayout>
@@ -12,12 +12,11 @@
 
 <script setup>
 import { ref } from "vue";
-
 import PageBreadcrumb from "@/components/common/PageBreadcrumb.vue";
 import AdminLayout from "@/components/layout/AdminLayout.vue";
 import ComponentCard from "@/components/common/ComponentCard.vue";
-import UserTable from "@/components/tables/management/UserTable.vue";
 import Button from '@/components/ui/Button.vue'
+import WorkTable from "@/components/tables/management/WorkTable.vue";
 
-const currentPageTitle = ref("User");
+const currentPageTitle = ref("Work");
 </script>
