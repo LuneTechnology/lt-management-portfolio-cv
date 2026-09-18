@@ -11,7 +11,7 @@ class ExperienceController extends Controller
     public function index()
     {
         // 'project' di-comment sementara sampai model Project dibuat oleh temanmu
-        $experiences = Experience::with(['work', 'positionType', 'workType', 'user' /*, 'project' */])->get();
+        $experiences = Experience::with(['work', 'positionType', 'workType', 'user' , 'project' ])->get();
         
         return response()->json($experiences, 200);
     }
