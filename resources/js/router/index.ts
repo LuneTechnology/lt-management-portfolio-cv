@@ -150,6 +150,11 @@ const router = createRouter({
       name: 'Stack',
       component: () => import('../views/Management/Stack/Stack.vue'),
     },
+    {
+      path: '/category',
+      name: 'Category',
+      component: () => import('../views/Management/Category/Category.vue'),
+    },
   ],
 })
 
