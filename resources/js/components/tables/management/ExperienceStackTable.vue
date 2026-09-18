@@ -8,24 +8,13 @@
           <tr class="border-b border-gray-200 dark:border-gray-700">
             <th class="px-5 py-3 text-left sm:px-6">
               <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                No
-              </p>
-            </th>
-            
-            <th class="px-5 py-3 text-left sm:px-6">
-              <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                Name
+                Experience
               </p>
             </th>
 
             <th class="px-5 py-3 text-left sm:px-6">
               <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                Tag
-              </p>
-            </th>
-            <th class="px-5 py-3 text-left sm:px-6">
-              <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                Action
+                Stack
               </p>
             </th>
           </tr>
@@ -33,31 +22,20 @@
 
         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
           <tr
-            v-for="stack in stacks"
-            :key="stack.id_stack"
+            v-for="experienceStack in experienceStacks"
+            :key="`${experienceStack.id_experience}-${experienceStack.id_stack}`"
             class="border-t border-gray-100 dark:border-gray-800"
           >
             <td class="px-5 py-4 sm:px-6">
               <p class="font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                {{ stacks.indexOf(stack) + 1 }}
-              </p>
-            </td>
-            <td class="px-5 py-4 sm:px-6">
-              <p class="font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                {{ stack.nama }}
+                {{ experienceStack.experience.project?.name }}
               </p>
             </td>
 
             <td class="px-5 py-4 sm:px-6">
               <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                {{ stack.tag.name }}
+                {{ experienceStack.stack?.nama }}
               </p>
-            </td>
-            <td class="px-5 py-4 sm:px-6">
-              <div class="flex items-center gap-2">
-                <Button size="sm" variant="warning"> Edit </Button>
-                <Button size="sm" variant="danger"> Delete </Button>
-              </div>
             </td>
           </tr>
         </tbody>
@@ -69,17 +47,16 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import Button from '@/components/ui/Button.vue'
 
-const stacks = ref([]);
+const experienceStacks = ref([]);
 
-const getStacks = async () => {
-  const response = await axios.get("/api/stacks");
+const getExperienceStacks = async () => {
+  const response = await axios.get("/api/experience-stacks");
 
-  stacks.value = response.data;
+  experienceStacks.value = response.data;
 };
 
 onMounted(() => {
-  getStacks();
+  getExperienceStacks();
 });
 </script>

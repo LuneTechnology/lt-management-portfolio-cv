@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Experience extends Model
 {
@@ -27,6 +28,6 @@ class Experience extends Model
     public function user() { return $this->belongsTo(User::class, 'id_user'); }
     public function project() 
     { 
-        return $this->belongsTo(Project::class, 'id_project'); 
+        return $this->belongsTo(Project::class, 'id_project', 'id_project'); 
     }
 }

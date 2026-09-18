@@ -45,8 +45,8 @@
 
             <td class="px-5 py-4 sm:px-6">
               <div class="flex items-center gap-2">
-                <Button size="sm" variant="primary"> Edit </Button>
-                <Button size="sm" variant="primary"> Delete </Button>
+                <Button size="sm" variant="warning"> Edit </Button>
+                <Button size="sm" variant="danger"> Delete </Button>
               </div>
             </td>
           </tr>
@@ -60,6 +60,7 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import Button from '@/components/ui/Button.vue'
+import { PlusIcon } from '@/icons'
 
 const tags = ref([]);
 

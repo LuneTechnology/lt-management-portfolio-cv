@@ -7,12 +7,13 @@
   >
     <!-- Card Header -->
     <div class="px-6 py-5">
-      <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
+      <!-- <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
         {{ title }}
       </h3>
       <p v-if="desc" class="mt-1 text-sm text-gray-500 dark:text-gray-400">
         {{ desc }}
-      </p>
+      </p> -->
+      <Button size="sm" variant="success"> Add {{ title }} </Button>
     </div>
 
     <!-- Card Body -->
@@ -26,12 +27,13 @@
 
 <script setup lang="ts">
 import { defineProps } from 'vue'
-
+import Button from '@/components/ui/Button.vue'
 interface Props {
   title: string
   className?: string
   desc?: string
 }
+
 
 defineProps<Props>()
 </script>

@@ -180,6 +180,14 @@ const router = createRouter({
         title: 'Experience Management',
       },
     },
+    {
+      path: '/experience-stacks',
+      name: 'Experience Stack',
+      component: () => import('../views/Management/ExperienceStack/ExperienceStack.vue'),
+      meta: {
+        title: 'Experience Stack Management',
+      },
+    },
   ],
 })
 
