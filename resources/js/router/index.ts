@@ -15,9 +15,17 @@ const router = createRouter({
       },
     },
     {
-    path: '/products',
-    name: 'Products',
-    component: () => import('../views/Products/Products.vue'),
+      path: '/products',
+      name: 'Products',
+      component: () => import('../views/Products/Products.vue'),
+    },
+    {
+      path: '/users',
+      name: 'Users',
+      component: () => import('../views/Management/User/User.vue'),
+      meta: {
+        title: 'User',
+      },
     },
     {
       path: '/calendar',
@@ -85,7 +93,6 @@ const router = createRouter({
         title: 'Badge',
       },
     },
-
     {
       path: '/buttons',
       name: 'Buttons',
@@ -94,7 +101,6 @@ const router = createRouter({
         title: 'Buttons',
       },
     },
-
     {
       path: '/images',
       name: 'Images',
@@ -119,7 +125,6 @@ const router = createRouter({
         title: 'Blank',
       },
     },
-
     {
       path: '/error-404',
       name: '404 Error',
@@ -128,7 +133,6 @@ const router = createRouter({
         title: '404 Error',
       },
     },
-
     {
       path: '/signin',
       name: 'Signin',
@@ -155,6 +159,19 @@ const router = createRouter({
       name: 'Category',
       component: () => import('../views/Management/Category/Category.vue'),
     },
+    {
+      path: '/tags',
+      name: 'Tags',
+      component: () => import('../views/Management/Tag/Tag.vue'),
+    },
+    {
+      path: '/experiences',
+      name: 'Experience',
+      component: () => import('../views/Management/Stack/Experience.vue'),
+      meta: {
+        title: 'Experience Management',
+      },
+    },
   ],
 })
 
@@ -163,4 +180,4 @@ export default router
 router.beforeEach((to, from, next) => {
     document.title = `${to.meta.title ?? 'Lune'} | Lune`
     next()
-})
+}) 

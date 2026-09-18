@@ -253,7 +253,8 @@ const menuGroups = [
           { name: "Project", path: "/projects", pro: false },
           { name: "Achievement", path: "/achievements", pro: false },
           { name: "Stack", path: "/stack", pro: false },
-          { name: "Category", path: "/category", pro: false }
+          { name: "Category", path: "/category", pro: false },
+          { name: "Tag", path: "/tags", pro: false }, 
         ],
       },
     ],
