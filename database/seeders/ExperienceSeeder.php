@@ -14,30 +14,35 @@ class ExperienceSeeder extends Seeder
 {
     public function run(): void
     {
-        $user = User::first();
-        $work1 = Work::first();
-        $work2 = Work::skip(1)->first() ?? $work1;
-        $position1 = PositionType::first();
-        $position2 = PositionType::skip(1)->first() ?? $position1;
-        $workType = WorkType::first();
-        $project = Project::first();
+        // Helper pencarian berdasarkan ID spesifik dengan fallback aman
+        $getUserId   = fn($id) => User::find($id)?->id_user ?? User::first()?->id_user;
+        $getWorkId   = fn($id) => Work::find($id)?->id_work ?? Work::first()?->id_work;
+        $getPosition = fn($id) => PositionType::find($id)?->id_position_type ?? PositionType::first()?->id_position_type;
+        $getWorkType = fn($id) => WorkType::find($id)?->id_work_type ?? WorkType::first()?->id_work_type;
+        $getProject  = fn($id) => Project::find($id)?->id_project ?? Project::first()?->id_project;
 
-        if ($user && $work1 && $position1 && $workType && $project) {
-            Experience::create([
-                'id_user'          => $user->id_user,
-                'id_work'          => $work2->id_work,
-                'id_position_type' => $position1->id_position_type,
-                'id_work_type'     => $workType->id_work_type,
-                'id_project'       => $project->id_project,
-            ]);
+        // Susun daftar data experience berdasarkan ID spesifik
+        $experiences = [
+            [
+                'id_user'          => $getUserId(1),  // Menargetkan User ID 1
+                'id_work'          => $getWorkId(1),  // Menargetkan Work ID 1
+                'id_position_type' => $getPosition(1),
+                'id_work_type'     => $getWorkType(2),
+                'id_project'       => $getProject(1),
+            ],
+            [
+                'id_user'          => $getUserId(2),  
+                'id_work'          => $getWorkId(2),  
+                'id_position_type' => $getPosition(2),
+                'id_work_type'     => $getWorkType(2),
+                'id_project'       => $getProject(1),
+            ],
+        ];
 
-            Experience::create([
-                'id_user'          => $user->id_user,
-                'id_work'          => $work2->id_work,
-                'id_position_type' => $position2->id_position_type,
-                'id_work_type'     => $workType->id_work_type,
-                'id_project'       => $project->id_project,
-            ]);
+        foreach ($experiences as $data) {
+            if ($data['id_user'] && $data['id_work']) {
+                Experience::create($data);
+            }
         }
     }
 }

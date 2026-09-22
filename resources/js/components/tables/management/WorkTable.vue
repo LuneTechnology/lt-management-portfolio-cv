@@ -3,27 +3,25 @@
     class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
   >
     <div class="max-w-full overflow-x-auto custom-scrollbar">
-      <table class="min-w-full">
+      <table class="w-full table-auto">
         <thead>
           <tr class="border-b border-gray-200 dark:border-gray-700">
-            <th class="px-5 py-3 text-left sm:px-6">
+            <th class="w-16 px-5 py-3 text-center sm:px-6">
               <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
                 No
               </p>
             </th>
-            
             <th class="px-5 py-3 text-left sm:px-6">
               <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                Name
-              </p>
-            </th>
-
-            <th class="px-5 py-3 text-left sm:px-6">
-              <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                Tag
+                Company
               </p>
             </th>
             <th class="px-5 py-3 text-left sm:px-6">
+              <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                Place
+              </p>
+            </th>
+            <th class="w-48 px-5 py-3 text-center sm:px-6">
               <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
                 Action
               </p>
@@ -33,31 +31,46 @@
 
         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
           <tr
-            v-for="stack in stacks"
-            :key="stack.id_stack"
-            class="border-t border-gray-100 dark:border-gray-800"
+            v-for="(work, index) in works"
+            :key="work.id_work || index"
+            class="border-t border-gray-100 dark:border-gray-800 hover:bg-gray-50/50 dark:hover:bg-white/[0.02] transition-colors"
           >
-            <td class="px-5 py-4 sm:px-6">
+            <!-- Kolom Nomor -->
+            <td class="px-5 py-4 text-center sm:px-6">
               <p class="font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                {{ stacks.indexOf(stack) + 1 }}
-              </p>
-            </td>
-            <td class="px-5 py-4 sm:px-6">
-              <p class="font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                {{ stack.nama }}
+                {{ index + 1 }}
               </p>
             </td>
 
+            <!-- Kolom Nama -->
             <td class="px-5 py-4 sm:px-6">
-              <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                {{ stack.tag.name }}
+              <p class="font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                {{ work.name }}
               </p>
             </td>
+
+            <!-- Kolom Tempat -->
             <td class="px-5 py-4 sm:px-6">
-              <div class="flex items-center gap-2">
+              <p class="text-gray-700 text-theme-sm dark:text-gray-300">
+                {{ work.place || '-' }}
+              </p>
+            </td>
+
+            <!-- Kolom Aksi -->
+            <td class="px-5 py-4 text-center sm:px-6">
+              <div class="flex items-center justify-center gap-2">
                 <Button size="sm" variant="warning"> Edit </Button>
                 <Button size="sm" variant="danger"> Delete </Button>
               </div>
+            </td>
+          </tr>
+
+          <!-- State Saat Data Kosong -->
+          <tr v-if="works.length === 0">
+            <td colspan="4" class="px-5 py-8 text-center sm:px-6 border-t border-gray-100 dark:border-gray-800">
+              <p class="font-medium text-gray-500 text-theme-sm dark:text-gray-400">
+                No work available.
+              </p>
             </td>
           </tr>
         </tbody>
@@ -69,17 +82,21 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import Button from '@/components/ui/Button.vue'
+import Button from "@/components/ui/Button.vue";
 
-const stacks = ref([]);
+const works = ref([]);
 
-const getStacks = async () => {
-  const response = await axios.get("/api/stacks");
-
-  stacks.value = response.data;
+const getWorks = async () => {
+  try {
+    const response = await axios.get("/api/works");
+    // Kompatibel dengan format response.data array mentah maupun JSON { success, data }
+    works.value = response.data.data || response.data;
+  } catch (error) {
+    console.error("Failed to fetch work data:", error);
+  }
 };
 
 onMounted(() => {
-  getStacks();
+  getWorks();
 });
 </script>

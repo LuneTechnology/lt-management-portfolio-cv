@@ -1,10 +1,10 @@
 <template>
   <AdminLayout>
     <PageBreadcrumb :pageTitle="currentPageTitle" />
-
+    
     <div class="space-y-5 sm:space-y-6">
       <ComponentCard :title="currentPageTitle">
-        <TagTable />
+        <WorkTypeTable />
       </ComponentCard>
     </div>
   </AdminLayout>
@@ -12,11 +12,11 @@
 
 <script setup>
 import { ref } from "vue";
-
 import PageBreadcrumb from "@/components/common/PageBreadcrumb.vue";
 import AdminLayout from "@/components/layout/AdminLayout.vue";
 import ComponentCard from "@/components/common/ComponentCard.vue";
-import TagTable from "@/components/tables/management/TagTable.vue";
+import Button from '@/components/ui/Button.vue'
+import WorkTypeTable from "@/components/tables/management/WorkTypeTable.vue";
 
-const currentPageTitle = ref("Tag");
+const currentPageTitle = ref("Work Types");
 </script>

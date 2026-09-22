@@ -11,16 +11,9 @@
                 No
               </p>
             </th>
-            
             <th class="px-5 py-3 text-left sm:px-6">
               <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                Name
-              </p>
-            </th>
-
-            <th class="px-5 py-3 text-left sm:px-6">
-              <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                Tag
+                Work Type Name
               </p>
             </th>
             <th class="px-5 py-3 text-left sm:px-6">
@@ -33,31 +26,36 @@
 
         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
           <tr
-            v-for="stack in stacks"
-            :key="stack.id_stack"
+            v-for="(workType, index) in workTypes"
+            :key="workType.id_work_type || index"
             class="border-t border-gray-100 dark:border-gray-800"
           >
             <td class="px-5 py-4 sm:px-6">
               <p class="font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                {{ stacks.indexOf(stack) + 1 }}
-              </p>
-            </td>
-            <td class="px-5 py-4 sm:px-6">
-              <p class="font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                {{ stack.nama }}
+                {{ index + 1 }}
               </p>
             </td>
 
             <td class="px-5 py-4 sm:px-6">
-              <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                {{ stack.tag.name }}
+              <p class="font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                {{ workType.name }}
               </p>
             </td>
+
             <td class="px-5 py-4 sm:px-6">
               <div class="flex items-center gap-2">
                 <Button size="sm" variant="warning"> Edit </Button>
                 <Button size="sm" variant="danger"> Delete </Button>
               </div>
+            </td>
+          </tr>
+
+          <!-- Empty State -->
+          <tr v-if="workTypes.length === 0">
+            <td colspan="3" class="px-5 py-8 text-center sm:px-6 border-t border-gray-100 dark:border-gray-800">
+              <p class="font-medium text-gray-500 text-theme-sm dark:text-gray-400">
+                No work type available.
+              </p>
             </td>
           </tr>
         </tbody>
@@ -69,17 +67,20 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import Button from '@/components/ui/Button.vue'
+import Button from "@/components/ui/Button.vue";
 
-const stacks = ref([]);
+const workTypes = ref([]);
 
-const getStacks = async () => {
-  const response = await axios.get("/api/stacks");
-
-  stacks.value = response.data;
+const getWorkTypes = async () => {
+  try {
+    const response = await axios.get("/api/work-types");
+    workTypes.value = response.data.data || response.data;
+  } catch (error) {
+    console.error("Failed to fetch work type data:", error);
+  }
 };
 
 onMounted(() => {
-  getStacks();
+  getWorkTypes();
 });
 </script>

@@ -26,7 +26,7 @@ Route::apiResource('works', WorkController::class);
 Route::apiResource('position-types', PositionTypeController::class);
 Route::apiResource('work-types', WorkTypeController::class);
 Route::apiResource('experiences', ExperienceController::class);
-
+Route::apiResource('experience-stacks', ExperienceStackController::class);
 Route::apiResource('tasks', TaskController::class);
 Route::apiResource('stacks', StackController::class);
 Route::apiResource('tags', TagController::class);

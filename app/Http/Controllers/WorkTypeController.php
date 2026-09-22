@@ -7,47 +7,61 @@ use Illuminate\Http\Request;
 
 class WorkTypeController extends Controller
 {
-    // READ - semua work type
     public function index()
     {
-        return response()->json(WorkType::all(), 200);
+        $workTypes = WorkType::all();
+
+        return response()->json([
+            'success' => true,
+            'data'    => $workTypes
+        ], 200);
     }
 
-    // CREATE
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:50',
+            'name' => 'required|string|max:255',
         ]);
 
         $workType = WorkType::create($validated);
 
-        return response()->json($workType, 201);
+        return response()->json([
+            'success' => true,
+            'message' => 'Work Type created successfully',
+            'data'    => $workType
+        ], 201);
     }
 
-    // READ - satu work type
     public function show(WorkType $workType)
     {
-        return response()->json($workType, 200);
+        return response()->json([
+            'success' => true,
+            'data'    => $workType
+        ], 200);
     }
 
-    // UPDATE
     public function update(Request $request, WorkType $workType)
     {
         $validated = $request->validate([
-            'name' => 'sometimes|required|string|max:50',
+            'name' => 'required|string|max:255',
         ]);
 
         $workType->update($validated);
 
-        return response()->json($workType, 200);
+        return response()->json([
+            'success' => true,
+            'message' => 'Work Type updated successfully',
+            'data'    => $workType
+        ], 200);
     }
 
-    // DELETE
     public function destroy(WorkType $workType)
     {
         $workType->delete();
 
-        return response()->json(['message' => 'Work type deleted successfully'], 200);
+        return response()->json([
+            'success' => true,
+            'message' => 'Work Type deleted successfully'
+        ], 200);
     }
 }

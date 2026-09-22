@@ -1,63 +1,129 @@
 <template>
-  <div class="overflow-x-auto">
-    <table class="min-w-full text-left text-sm whitespace-nowrap">
-      <thead class="border-b bg-gray-50/50">
-        <tr>
-          <th scope="col" class="px-6 py-4 font-semibold text-gray-600">No</th>
-          <th scope="col" class="px-6 py-4 font-semibold text-gray-600">User</th>
-          <th scope="col" class="px-6 py-4 font-semibold text-gray-600">Perusahaan (Work)</th>
-          <th scope="col" class="px-6 py-4 font-semibold text-gray-600">Jabatan (Position)</th>
-          <th scope="col" class="px-6 py-4 font-semibold text-gray-600">Tipe Kerja</th>
-          <th scope="col" class="px-6 py-4 font-semibold text-gray-600">Proyek</th>
-          <th scope="col" class="px-6 py-4 font-semibold text-gray-600">Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in experiences" :key="item.id_experience || index" class="border-b hover:bg-gray-50/50">
-          <th scope="row" class="px-6 py-4 font-medium text-gray-900">{{ index + 1 }}</th>
-          <td class="px-6 py-4 font-medium text-gray-900">{{ item.user?.username || '-' }}</td>
-          
-          <!-- Menampilkan Nama Perusahaan beserta Lokasinya (place) -->
-          <td class="px-6 py-4 text-gray-600">
-            <div class="font-medium text-gray-900">{{ item.work?.name || '-' }}</div>
-            <div v-if="item.work?.place" class="text-xs text-gray-500">{{ item.work?.place }}</div>
-          </td>
+  <div
+    class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
+  >
+    <div class="max-w-full overflow-x-auto custom-scrollbar">
+      <table class="w-full table-auto">
+        <thead>
+          <tr class="border-b border-gray-200 dark:border-gray-700">
+            <th class="w-16 px-5 py-3 text-center sm:px-6">
+              <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                No
+              </p>
+            </th>
+            <th class="px-5 py-3 text-left sm:px-6">
+              <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                User
+              </p>
+            </th>
+            <th class="px-5 py-3 text-left sm:px-6">
+              <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                Company (Work)
+              </p>
+            </th>
+            <th class="px-5 py-3 text-left sm:px-6">
+              <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                Position
+              </p>
+            </th>
+            <th class="px-5 py-3 text-left sm:px-6">
+              <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                Work Type
+              </p>
+            </th>
+            <th class="px-5 py-3 text-left sm:px-6">
+              <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                Project
+              </p>
+            </th>
+            <th class="w-44 px-5 py-3 text-center sm:px-6">
+              <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                Action
+              </p>
+            </th>
+          </tr>
+        </thead>
 
-          <td class="px-6 py-4 text-gray-600">{{ item.position_type?.name || '-' }}</td>
-          <td class="px-6 py-4 text-gray-600">{{ item.work_type?.name || '-' }}</td>
-          
-          <!-- Fallback jika kolom proyek menggunakan nama 'title' atau 'name' -->
-          <td class="px-6 py-4 text-gray-600">
-            {{ item.project?.name || item.project?.title || '-' }}
-          </td>
+        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+          <tr
+            v-for="(experience, index) in experiences"
+            :key="experience.id_experience || index"
+            class="border-t border-gray-100 dark:border-gray-800 hover:bg-gray-50/50 dark:hover:bg-white/[0.02] transition-colors"
+          >
+            <td class="px-5 py-4 text-center sm:px-6">
+              <p class="font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                {{ index + 1 }}
+              </p>
+            </td>
 
-          <td class="px-6 py-4 flex gap-3">
-            <button class="bg-[#5660F9] text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium">
-              Edit
-            </button>
-            <button class="bg-red-500 text-white px-5 py-2 rounded-lg hover:bg-red-600 transition-colors font-medium">
-              Delete
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            <td class="px-5 py-4 sm:px-6">
+              <p class="font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                {{ experience.user?.username || '-' }}
+              </p>
+            </td>
+
+            <td class="px-5 py-4 sm:px-6">
+              <p class="font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                {{ experience.work?.name || '-' }}
+              </p>
+              <p class="text-gray-500 text-theme-xs dark:text-gray-400 mt-0.5">
+                {{ experience.work?.place || '' }}
+              </p>
+            </td>
+
+            <td class="px-5 py-4 sm:px-6">
+              <p class="text-gray-700 text-theme-sm dark:text-gray-300">
+                {{ experience.positionType?.name || experience.position_type?.name || '-' }}
+              </p>
+            </td>
+
+            <td class="px-5 py-4 sm:px-6">
+              <p class="text-gray-700 text-theme-sm dark:text-gray-300">
+                {{ experience.workType?.name || experience.work_type?.name || '-' }}
+              </p>
+            </td>
+
+            <td class="px-5 py-4 sm:px-6">
+              <p class="text-gray-700 text-theme-sm dark:text-gray-300">
+                {{ experience.project?.name || '-' }}
+              </p>
+            </td>
+
+            <td class="px-5 py-4 text-center sm:px-6">
+              <div class="flex items-center justify-center gap-2">
+                <Button size="sm" variant="warning"> Edit </Button>
+                <Button size="sm" variant="danger"> Delete </Button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Empty State -->
+          <tr v-if="experiences.length === 0">
+            <td colspan="7" class="px-5 py-8 text-center sm:px-6 border-t border-gray-100 dark:border-gray-800">
+              <p class="font-medium text-gray-500 text-theme-sm dark:text-gray-400">
+                No experience available.
+              </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
+import Button from "@/components/ui/Button.vue";
 
 const experiences = ref([]);
 
 const getExperiences = async () => {
   try {
     const response = await axios.get("/api/experiences");
-    // Mendukung penanganan jika API dibungkus oleh Eloquent API Resource (response.data.data) atau Array langsung
     experiences.value = response.data.data || response.data;
   } catch (error) {
-    console.error("Gagal mengambil data experience:", error);
+    console.error("Failed to fetch experience data:", error);
   }
 };
 

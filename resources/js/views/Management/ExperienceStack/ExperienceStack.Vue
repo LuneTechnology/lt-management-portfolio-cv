@@ -3,8 +3,8 @@
     <PageBreadcrumb :pageTitle="currentPageTitle" />
 
     <div class="space-y-5 sm:space-y-6">
-      <ComponentCard :title="currentPageTitle">
-        <TagTable />
+      <ComponentCard title="Experience Stack">
+        <ExperienceStackTable />
       </ComponentCard>
     </div>
   </AdminLayout>
@@ -16,7 +16,7 @@ import { ref } from "vue";
 import PageBreadcrumb from "@/components/common/PageBreadcrumb.vue";
 import AdminLayout from "@/components/layout/AdminLayout.vue";
 import ComponentCard from "@/components/common/ComponentCard.vue";
-import TagTable from "@/components/tables/management/TagTable.vue";
+import ExperienceStackTable from "@/components/tables/management/ExperienceStackTable.vue";
 
-const currentPageTitle = ref("Tag");
+const currentPageTitle = ref("Experience Stack");
 </script>

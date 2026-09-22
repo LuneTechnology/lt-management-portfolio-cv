@@ -167,9 +167,41 @@ const router = createRouter({
     {
       path: '/experiences',
       name: 'Experience',
-      component: () => import('../views/Management/Stack/Experience.vue'),
+      component: () => import('../views/Management/Experience/Experience.vue'),
       meta: {
         title: 'Experience Management',
+      },
+    },
+    {
+      path: '/Works',
+      name: 'Work',
+      component: () => import('../views/Management/Work/Work.vue'),
+      meta: {
+        title: 'Work Management',
+      },
+    },
+    {
+      path: '/experience-stacks',
+      name: 'Experience Stack',
+      component: () => import('../views/Management/ExperienceStack/ExperienceStack.vue'),
+      meta: {
+        title: 'Experience Stack Management',
+      },
+    },
+    {
+      path: '/position-types',
+      name: 'Position Types',
+      component: () => import('../views/Management/PositionType/PositionType.vue'),
+      meta: {
+        title: 'Position Type Management',
+      },
+    },
+    {
+      path: '/worktypes',
+      name: 'Work Types',
+      component: () => import('../views/Management/WorkType/WorkType.vue'),
+      meta: {
+        title: 'Work Type Management',
       },
     },
   ],
