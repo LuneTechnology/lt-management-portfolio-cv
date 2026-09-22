@@ -10,10 +10,18 @@ class ExperienceController extends Controller
     // READ - semua experience beserta relasinya
     public function index()
     {
-        // 'project' di-comment sementara sampai model Project dibuat oleh temanmu
-        $experiences = Experience::with(['work', 'positionType', 'workType', 'user' , 'project' ])->get();
-        
-        return response()->json($experiences, 200);
+        $experiences = Experience::with([
+            'user',
+            'work',
+            'positionType',
+            'workType',
+            'project'
+        ])->get();
+
+        return response()->json([
+            'success' => true,
+            'data'    => $experiences
+        ], 200);
     }
 
     // CREATE
@@ -28,16 +36,24 @@ class ExperienceController extends Controller
         ]);
 
         $experience = Experience::create($validated);
+        $experience->load(['user', 'work', 'positionType', 'workType', 'project']);
 
-        return response()->json($experience, 201);
+        return response()->json([
+            'success' => true,
+            'message' => 'Experience created successfully',
+            'data'    => $experience
+        ], 201);
     }
 
     // READ - satu experience
     public function show(Experience $experience)
     {
-        $experience->load(['work', 'positionType', 'workType', 'user' /*, 'project' */]);
+        $experience->load(['user', 'work', 'positionType', 'workType', 'project']);
 
-        return response()->json($experience, 200);
+        return response()->json([
+            'success' => true,
+            'data'    => $experience
+        ], 200);
     }
 
     // UPDATE
@@ -52,8 +68,13 @@ class ExperienceController extends Controller
         ]);
 
         $experience->update($validated);
+        $experience->load(['user', 'work', 'positionType', 'workType', 'project']);
 
-        return response()->json($experience, 200);
+        return response()->json([
+            'success' => true,
+            'message' => 'Experience updated successfully',
+            'data'    => $experience
+        ], 200);
     }
 
     // DELETE
@@ -61,6 +82,9 @@ class ExperienceController extends Controller
     {
         $experience->delete();
 
-        return response()->json(['message' => 'Experience deleted successfully'], 200);
+        return response()->json([
+            'success' => true,
+            'message' => 'Experience deleted successfully'
+        ], 200);
     }
 }

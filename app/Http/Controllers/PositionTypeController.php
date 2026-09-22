@@ -7,47 +7,61 @@ use Illuminate\Http\Request;
 
 class PositionTypeController extends Controller
 {
-    // READ - semua position type
     public function index()
     {
-        return response()->json(PositionType::all(), 200);
+        $positionTypes = PositionType::all();
+
+        return response()->json([
+            'success' => true,
+            'data'    => $positionTypes
+        ], 200);
     }
 
-    // CREATE
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:50',
+            'name' => 'required|string|max:255',
         ]);
 
         $positionType = PositionType::create($validated);
 
-        return response()->json($positionType, 201);
+        return response()->json([
+            'success' => true,
+            'message' => 'Position Type created successfully',
+            'data'    => $positionType
+        ], 201);
     }
 
-    // READ - satu position type
     public function show(PositionType $positionType)
     {
-        return response()->json($positionType, 200);
+        return response()->json([
+            'success' => true,
+            'data'    => $positionType
+        ], 200);
     }
 
-    // UPDATE
     public function update(Request $request, PositionType $positionType)
     {
         $validated = $request->validate([
-            'name' => 'sometimes|required|string|max:50',
+            'name' => 'required|string|max:255',
         ]);
 
         $positionType->update($validated);
 
-        return response()->json($positionType, 200);
+        return response()->json([
+            'success' => true,
+            'message' => 'Position Type updated successfully',
+            'data'    => $positionType
+        ], 200);
     }
 
-    // DELETE
     public function destroy(PositionType $positionType)
     {
         $positionType->delete();
 
-        return response()->json(['message' => 'Position type deleted successfully'], 200);
+        return response()->json([
+            'success' => true,
+            'message' => 'Position Type deleted successfully'
+        ], 200);
     }
 }

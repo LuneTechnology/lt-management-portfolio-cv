@@ -7,49 +7,63 @@ use Illuminate\Http\Request;
 
 class WorkController extends Controller
 {
-    // READ - semua work
     public function index()
     {
-        return response()->json(Work::all(), 200);
+        $works = Work::all();
+
+        return response()->json([
+            'success' => true,
+            'data'    => $works
+        ], 200);
     }
 
-    // CREATE
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'  => 'required|string|max:50',
-            'place' => 'required|string|max:50',
+            'name'  => 'required|string|max:255',
+            'place' => 'nullable|string|max:255',
         ]);
 
         $work = Work::create($validated);
 
-        return response()->json($work, 201);
+        return response()->json([
+            'success' => true,
+            'message' => 'Work created successfully',
+            'data'    => $work
+        ], 201);
     }
 
-    // READ - satu work
     public function show(Work $work)
     {
-        return response()->json($work, 200);
+        return response()->json([
+            'success' => true,
+            'data'    => $work
+        ], 200);
     }
 
-    // UPDATE
     public function update(Request $request, Work $work)
     {
         $validated = $request->validate([
-            'name'  => 'sometimes|required|string|max:50',
-            'place' => 'sometimes|required|string|max:50',
+            'name'  => 'sometimes|required|string|max:255',
+            'place' => 'nullable|string|max:255',
         ]);
 
         $work->update($validated);
 
-        return response()->json($work, 200);
+        return response()->json([
+            'success' => true,
+            'message' => 'Work updated successfully',
+            'data'    => $work
+        ], 200);
     }
 
-    // DELETE
     public function destroy(Work $work)
     {
         $work->delete();
 
-        return response()->json(['message' => 'Work deleted successfully'], 200);
+        return response()->json([
+            'success' => true,
+            'message' => 'Work deleted successfully'
+        ], 200);
     }
 }

@@ -250,6 +250,8 @@ const menuGroups = [
           { name: "Education", path: "/educations", pro: false },
           { name: "Work", path: "/works", pro: false },
           { name: "Experience", path: "/experiences", pro: false },
+          { name: "Position Type", path: "/position-types", pro: false },
+          { name: "Worktype", path: "/worktypes", pro: false },
           { name: "Project", path: "/projects", pro: false },
           { name: "Achievement", path: "/achievements", pro: false },
           { name: "Stack", path: "/stack", pro: false },

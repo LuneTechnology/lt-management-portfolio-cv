@@ -177,7 +177,7 @@ const router = createRouter({
       name: 'Work',
       component: () => import('../views/Management/Work/Work.vue'),
       meta: {
-        title: 'Experience Management',
+        title: 'Work Management',
       },
     },
     {
@@ -186,6 +186,22 @@ const router = createRouter({
       component: () => import('../views/Management/ExperienceStack/ExperienceStack.vue'),
       meta: {
         title: 'Experience Stack Management',
+      },
+    },
+    {
+      path: '/position-types',
+      name: 'Position Types',
+      component: () => import('../views/Management/PositionType/PositionType.vue'),
+      meta: {
+        title: 'Position Type Management',
+      },
+    },
+    {
+      path: '/worktypes',
+      name: 'Work Types',
+      component: () => import('../views/Management/WorkType/WorkType.vue'),
+      meta: {
+        title: 'Work Type Management',
       },
     },
   ],

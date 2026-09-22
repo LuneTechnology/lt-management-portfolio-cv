@@ -4,7 +4,7 @@
     
     <div class="space-y-5 sm:space-y-6">
       <ComponentCard :title="currentPageTitle">
-        <ExperienceTable />
+        <WorkTypeTable />
       </ComponentCard>
     </div>
   </AdminLayout>
@@ -16,7 +16,7 @@ import PageBreadcrumb from "@/components/common/PageBreadcrumb.vue";
 import AdminLayout from "@/components/layout/AdminLayout.vue";
 import ComponentCard from "@/components/common/ComponentCard.vue";
 import Button from '@/components/ui/Button.vue'
-import ExperienceTable from "@/components/tables/management/ExperienceTable.vue";
+import WorkTypeTable from "@/components/tables/management/WorkTypeTable.vue";
 
-const currentPageTitle = ref("Experience");
+const currentPageTitle = ref("Work Types");
 </script>
