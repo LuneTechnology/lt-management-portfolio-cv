@@ -212,7 +212,14 @@ const router = createRouter({
         title: 'Task Management',
       },
     },
-
+    {
+      path: '/educations',
+      name: 'Education',
+      component: () => import('../views/Management/Education/Education.vue'),
+      meta: {
+        title: 'Education Management',
+      },
+    },
   ],
 })
 
