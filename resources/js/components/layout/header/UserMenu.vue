@@ -9,7 +9,7 @@
         :src="'/images/user/owner.jpg'" alt="User" />
       </span>
 
-      <span class="block mr-1 font-medium text-theme-sm">Musharof </span>
+      <span class="block mr-1 font-medium text-theme-sm">{{ user?.username }} </span>
 
       <ChevronDownIcon :class="{ 'rotate-180': dropdownOpen }" />
     </button>
@@ -21,10 +21,10 @@
     >
       <div>
         <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
-          Musharof Chowdhury
+          {{ user?.name }}
         </span>
         <span class="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
-          randomuser@pimjo.com
+          {{ user?.email }}
         </span>
       </div>
 
@@ -43,7 +43,7 @@
           </router-link>
         </li>
       </ul>
-      <router-link
+      <!-- <router-link
         to="/signin"
         @click="signOut"
         class="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
@@ -52,7 +52,18 @@
           class="text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-300"
         />
         Sign out
-      </router-link>
+      </router-link> -->
+
+      <button
+        type="button"
+        @click="signOut"
+        class="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+      >
+        <LogoutIcon
+          class="text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-300"
+        />
+        Sign out
+      </button>
     </div>
     <!-- Dropdown End -->
   </div>
@@ -62,9 +73,15 @@
 import { UserCircleIcon, ChevronDownIcon, LogoutIcon, SettingsIcon, InfoCircleIcon } from '@/icons'
 import { RouterLink } from 'vue-router'
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuth } from '@/composables/useAuth'
 
 const dropdownOpen = ref(false)
 const dropdownRef = ref(null)
+
+const router = useRouter()
+
+const { user, logout } = useAuth()
 
 const menuItems = [
   { href: '/profile', icon: UserCircleIcon, text: 'Edit profile' },
@@ -80,10 +97,18 @@ const closeDropdown = () => {
   dropdownOpen.value = false
 }
 
-const signOut = () => {
-  // Implement sign out logic here
-  console.log('Signing out...')
-  closeDropdown()
+const signOut = async () => {
+  console.log('BUTTON SIGN OUT DIKLIK')
+
+  try {
+    await logout()
+    console.log('LOGOUT BERHASIL')
+
+    closeDropdown()
+    await router.push('/signin')
+  } catch (error) {
+    console.error('Logout gagal:', error)
+  }
 }
 
 const handleClickOutside = (event) => {

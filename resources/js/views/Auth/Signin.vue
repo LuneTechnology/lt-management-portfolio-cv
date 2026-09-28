@@ -102,6 +102,12 @@
                   </div>
                 </div>
                 <form @submit.prevent="handleSubmit">
+                  <div
+                    v-if="errorMessage"
+                    class="mb-4 rounded-lg bg-error-50 px-4 py-3 text-sm text-error-600"
+                  >
+                    {{ errorMessage }}
+                  </div>
                   <div class="space-y-5">
                     <!-- Email -->
                     <div>
@@ -274,23 +280,52 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
 import CommonGridShape from '@/components/common/CommonGridShape.vue'
 import FullScreenLayout from '@/components/layout/FullScreenLayout.vue'
+
+import { useAuth } from '@/composables/useAuth'
+import { login } from '@/services/auth'
+
+const router = useRouter()
+
 const email = ref('')
 const password = ref('')
 const showPassword = ref(false)
 const keepLoggedIn = ref(false)
 
+const errorMessage = ref('')
+const isLoading = ref(false)
+
+const { user } = useAuth()
 const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value
 }
 
-const handleSubmit = () => {
-  // Handle form submission
-  console.log('Form submitted', {
-    email: email.value,
-    password: password.value,
-    keepLoggedIn: keepLoggedIn.value,
-  })
+const handleSubmit = async () => {
+  try {
+    errorMessage.value = ''
+    isLoading.value = true
+
+    const response = await login(
+      email.value,
+      password.value
+    )
+
+    console.log('Login berhasil:', response)
+
+    user.value = response.user
+
+    await router.push({ name: 'Ecommerce' })
+  } catch (error: any) {
+    console.error('Login gagal:', error)
+
+    errorMessage.value =
+      error.response?.data?.message ??
+      'Login gagal. Silakan coba lagi.'
+  } finally {
+    isLoading.value = false
+  }
 }
 </script>

@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Model
+class User extends Authenticatable
 {
     protected $primaryKey = 'id_user';
 
@@ -18,8 +18,16 @@ class User extends Model
         'id_role',
     ];
 
+    protected $hidden = [
+        'password',
+    ];
+
     public function role()
     {
-        return $this->belongsTo(Role::class, 'id_role', 'id_role');
+        return $this->belongsTo(
+            Role::class,
+            'id_role',
+            'id_role'
+        );
     }
 }

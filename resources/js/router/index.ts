@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuth } from '@/composables/useAuth'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -225,7 +226,38 @@ const router = createRouter({
 
 export default router
 
-router.beforeEach((to, from, next) => {
-    document.title = `${to.meta.title ?? 'Lune'} | Lune`
-    next()
-}) 
+router.beforeEach(async (to, _from, next) => {
+  document.title = `${to.meta.title ?? 'Lune'} | Lune`
+
+  const {
+    user,
+    fetchUser,
+    initialized,
+  } = useAuth()
+
+  // Cek session Laravel hanya sekali
+  if (!initialized.value) {
+    await fetchUser()
+  }
+
+  const isAuthenticated = user.value !== null
+
+  // Halaman login
+  if (to.path === '/signin') {
+    if (isAuthenticated) {
+      next({ name: 'Ecommerce' })
+    } else {
+      next()
+    }
+
+    return
+  }
+
+  // Semua halaman lain membutuhkan login
+  if (!isAuthenticated) {
+    next('/signin')
+    return
+  }
+
+  next()
+})

@@ -22,7 +22,6 @@
                 $table->unsignedBigInteger('id_role')-> nullable();
                 $table->timestamps();
 
-
                 $table->foreign('id_role')
                       ->references('id_role')
                       ->on('role')
@@ -35,6 +34,6 @@
          */
         public function down(): void
         {
-            Schema::dropIfExists('user');
+            Schema::dropIfExists('users');
         }
     };
