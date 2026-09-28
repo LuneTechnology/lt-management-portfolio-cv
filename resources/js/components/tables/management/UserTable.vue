@@ -1,14 +1,14 @@
 <template>
   <div>
     <!-- Tombol tambah -->
-    <div class="flex justify-end mb-4">
+    <!-- <div class="flex justify-end mb-4">
       <button
         @click="openCreateModal"
         class="px-4 py-2 bg-brand-500 text-white rounded-lg hover:bg-brand-600"
       >
         + Tambah User
       </button>
-    </div>
+    </div> -->
 
     <!-- Tabel -->
     <div class="overflow-x-auto">

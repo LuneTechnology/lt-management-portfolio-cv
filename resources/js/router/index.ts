@@ -188,6 +188,14 @@ const router = createRouter({
         title: 'Experience Stack Management',
       },
     },
+    {
+      path: '/educations',
+      name: 'Education',
+      component: () => import('../views/Management/Education/Education.vue'),
+      meta: {
+        title: 'Education Management',
+      },
+    },
   ],
 })
 
