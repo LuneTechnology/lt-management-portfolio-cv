@@ -18,12 +18,15 @@ class TaskController extends Controller
     {
         $validated = $request->validate([
             'id_experience' => 'required|integer|exists:experiences,id_experience',
-            'name' => 'required|string|max:50',
+            'desc' => 'required|string|max:50',
         ]);
 
         $task = Task::create($validated);
 
-        return response()->json($task, 201);
+        return response()->json(
+            $task->load('experience'),
+            201
+        );
     }
 
     public function show(Task $task)
@@ -37,12 +40,14 @@ class TaskController extends Controller
     {
         $validated = $request->validate([
             'id_experience' => 'required|integer|exists:experiences,id_experience',
-            'name' => 'required|string|max:50',
+            'desc' => 'required|string|max:50',
         ]);
 
         $task->update($validated);
 
-        return response()->json($task);
+        return response()->json(
+            $task->load('experience')
+        );
     }
 
     public function destroy(Task $task)

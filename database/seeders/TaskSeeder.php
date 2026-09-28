@@ -10,25 +10,23 @@ class TaskSeeder extends Seeder
 {
     public function run(): void
     {
-        $experience = Experience::first();
+        $experiences = Experience::all();
 
-        if (!$experience) {
-            return;
+        foreach ($experiences as $experience) {
+            Task::create([
+                'id_experience' => $experience->id_experience,
+                'desc' => 'Develop application',
+            ]);
+
+            Task::create([
+                'id_experience' => $experience->id_experience,
+                'desc' => 'Create documentation',
+            ]);
+
+            Task::create([
+                'id_experience' => $experience->id_experience,
+                'desc' => 'Testing application',
+            ]);
         }
-
-        Task::create([
-            'id_experience' => $experience->id_experience,
-            'name' => 'Develop Application',
-        ]);
-
-        Task::create([
-            'id_experience' => $experience->id_experience,
-            'name' => 'Create Documentation',
-        ]);
-
-        Task::create([
-            'id_experience' => $experience->id_experience,
-            'name' => 'Testing',
-        ]);
     }
 }

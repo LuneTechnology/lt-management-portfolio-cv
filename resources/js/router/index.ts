@@ -204,6 +204,15 @@ const router = createRouter({
         title: 'Work Type Management',
       },
     },
+    {
+      path: '/tasks',
+      name: 'Tasks',
+      component: () => import('../views/Management/Task/Task.vue'),
+      meta: {
+        title: 'Task Management',
+      },
+    },
+
   ],
 })
 

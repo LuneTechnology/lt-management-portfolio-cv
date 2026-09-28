@@ -258,6 +258,7 @@ const menuGroups = [
           { name: "Experience Stack", path: "/experience-stacks", pro: false },
           { name: "Category", path: "/category", pro: false },
           { name: "Tag", path: "/tags", pro: false }, 
+          { name: "Task", path: "/tasks", pro: false },
         ],
       },
     ],

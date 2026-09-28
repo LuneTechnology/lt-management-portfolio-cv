@@ -8,14 +8,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Task extends Model
 {
     protected $table = 'task';
-
     protected $primaryKey = 'id_task';
 
     public $timestamps = false;
 
     protected $fillable = [
         'id_experience',
-        'name',
+        'desc',
     ];
 
     public function experience(): BelongsTo

@@ -18,10 +18,10 @@ class DatabaseSeeder extends Seeder
             LinkSeeder::class,
             UserSeeder::class,
             EducationSeeder::class,
+            ExperienceSeeder::class,
             TagSeeder::class,
             StackSeeder::class,
             TaskSeeder::class,
-            ExperienceSeeder::class,
             ExperienceStackSeeder::class,
         ]);
     }
