@@ -14,7 +14,7 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        if (!Auth::guard('web')->attempt($credentials)) {
+        if (!Auth::attempt($credentials)) {
             return response()->json([
                 'message' => 'Email atau password salah.',
             ], 401);
@@ -22,7 +22,7 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        $user = Auth::guard('web')->user()->load('role');
+        $user = Auth::user()->load('role');
 
         return response()->json([
             'message' => 'Login berhasil.',
@@ -32,7 +32,7 @@ class AuthController extends Controller
 
     public function me()
     {
-        $user = Auth::guard('web')->user()->load('role');
+        $user = Auth::user()->load('role');
 
         return response()->json([
             'user' => $user,
@@ -41,7 +41,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::guard('web')->logout();
+        Auth::logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

@@ -23,7 +23,7 @@
         <img
           v-if="isExpanded || isHovered || isMobileOpen"
           class="dark:hidden"
-          :src="'/images/logo/logo.svg'"
+          :src="'/images/logo/logo-dark-avra.png'"
           alt="Logo"
           width="150"
           height="40"
@@ -31,18 +31,18 @@
         <img
           v-if="isExpanded || isHovered || isMobileOpen"
           class="hidden dark:block"
-          :src="'/images/logo/logo-dark.svg'"
+          :src="'/images/logo/logo-light-avra.png'"
           alt="Logo"
           width="150"
           height="40"
         />
-        <img
+        <!-- <img
           v-else
           :src="'/images/logo/logo-icon.svg'"
           alt="Logo"
           width="32"
           height="32"
-        />
+        /> -->
       </router-link>
     </div>
     <div
@@ -206,7 +206,7 @@
           </div>
         </div>
       </nav>
-      <SidebarWidget v-if="isExpanded || isHovered || isMobileOpen" />
+      <!-- <SidebarWidget v-if="isExpanded || isHovered || isMobileOpen" /> -->
     </div>
   </aside>
 </template>
@@ -233,113 +233,202 @@ import {
 import SidebarWidget from "./SidebarWidget.vue";
 import BoxCubeIcon from "@/icons/BoxCubeIcon.vue";
 import { useSidebar } from "@/composables/useSidebar";
+import { useAuth } from "@/composables/useAuth";
 
 const route = useRoute();
 
 const { isExpanded, isMobileOpen, isHovered, openSubmenu } = useSidebar();
 
-const menuGroups = [
-    {
-    title: "Management",
-    items: [
+const { user } = useAuth();
+
+const menuGroups = computed(() => {
+  const roleId = user.value?.id_role;
+
+  if (roleId === 1) {
+    return [
       {
-        icon: TableIcon,
-        name: "Management",
-        subItems: [
-          { name: "User", path: "/users", pro: false },
-          { name: "Education", path: "/educations", pro: false },
-          { name: "Work", path: "/works", pro: false },
-          { name: "Experience", path: "/experiences", pro: false },
-          { name: "Position Type", path: "/position-types", pro: false },
-          { name: "Worktype", path: "/worktypes", pro: false },
-          { name: "Project", path: "/projects", pro: false },
-          { name: "Achievement", path: "/achievements", pro: false },
-          { name: "Stack", path: "/stack", pro: false },
-          { name: "Experience Stack", path: "/experience-stacks", pro: false },
-          { name: "Category", path: "/category", pro: false },
-          { name: "Tag", path: "/tags", pro: false }, 
-          { name: "Task", path: "/tasks", pro: false },
+        title: "Management",
+        items: [
+          {
+            icon: TableIcon,
+            name: "Management",
+            subItems: [
+              {
+                name: "Education",
+                path: "/educations",
+                pro: false,
+              },
+              {
+                name: "Work",
+                path: "/works",
+                pro: false,
+              },
+              {
+                name: "Experience",
+                path: "/experiences",
+                pro: false,
+              },
+              {
+                name: "Project",
+                path: "/projects",
+                pro: false,
+              },
+              {
+                name: "Achievement",
+                path: "/achievements",
+                pro: false,
+              },
+              {
+                name: "Skills",
+                path: "/stack",
+                pro: false,
+              },
+            ],
+          },
         ],
-      },
-    ],
-  },
-  {
-    title: "Menu",
-    items: [
-      {
-        icon: GridIcon,
-        name: "Dashboard",
-        subItems: [{ name: "Ecommerce", path: "/", pro: false }],
-      },
-      {
-        icon: CalenderIcon,
-        name: "Calendar",
-        path: "/calendar",
-      },
-      {
-        icon: UserCircleIcon,
-        name: "User Profile",
-        path: "/profile",
       },
 
       {
-        name: "Forms",
-        icon: ListIcon,
-        subItems: [
-          { name: "Form Elements", path: "/form-elements", pro: false },
+        title: "Account",
+        items: [
+          {
+            icon: UserCircleIcon,
+            name: "Profile",
+            path: "/profile",
+          },
         ],
       },
-      {
-        name: "Tables",
-        icon: TableIcon,
-        subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
-      },
-      {
-        name: "Pages",
-        icon: PageIcon,
-        subItems: [
-          { name: "Black Page", path: "/blank", pro: false },
-          { name: "404 Page", path: "/error-404", pro: false },
-        ],
-      },
-    ],
-  },
 
-  {
-    title: "Others",
-    items: [
       {
-        icon: PieChartIcon,
-        name: "Charts",
-        subItems: [
-          { name: "Line Chart", path: "/line-chart", pro: false },
-          { name: "Bar Chart", path: "/bar-chart", pro: false },
+        title: "Menu",
+        items: [
+          {
+            icon: GridIcon,
+            name: "Dashboard",
+            path: "/",
+          },
+          {
+            icon: CalenderIcon,
+            name: "Calendar",
+            path: "/calendar",
+          },
         ],
       },
+    ];
+  }
+
+  if (roleId === 2) {
+    return [
       {
-        icon: BoxCubeIcon,
-        name: "Ui Elements",
-        subItems: [
-          { name: "Alerts", path: "/alerts", pro: false },
-          { name: "Avatars", path: "/avatars", pro: false },
-          { name: "Badge", path: "/badge", pro: false },
-          { name: "Buttons", path: "/buttons", pro: false },
-          { name: "Images", path: "/images", pro: false },
-          { name: "Videos", path: "/videos", pro: false },
+        title: "Management",
+        items: [
+          {
+            icon: TableIcon,
+            name: "Management",
+            subItems: [
+              {
+                name: "Admins",
+                path: "/users",
+                pro: false,
+              },
+              {
+                name: "Education",
+                path: "/educations",
+                pro: false,
+              },
+              {
+                name: "Work",
+                path: "/works",
+                pro: false,
+              },
+              {
+                name: "Experience",
+                path: "/experiences",
+                pro: false,
+              },
+              {
+                name: "Project",
+                path: "/projects",
+                pro: false,
+              },
+              {
+                name: "Achievement",
+                path: "/achievements",
+                pro: false,
+              },
+              {
+                name: "Skills",
+                path: "/stack",
+                pro: false,
+              },
+            ],
+          },
         ],
       },
+
       {
-        icon: PlugInIcon,
-        name: "Authentication",
-        subItems: [
-          { name: "Signin", path: "/signin", pro: false },
-          { name: "Signup", path: "/signup", pro: false },
+        title: "Master Data",
+        items: [
+          {
+            icon: TableIcon,
+            name: "Master Data",
+            subItems: [
+              {
+                name: "Position Type",
+                path: "/position-types",
+                pro: false,
+              },
+              {
+                name: "Work Type",
+                path: "/work-types",
+                pro: false,
+              },
+              {
+                name: "Category",
+                path: "/category",
+                pro: false,
+              },
+              {
+                name: "Tag",
+                path: "/tags",
+                pro: false,
+              },
+            ],
+          },
         ],
       },
-      // ... Add other menu items here
-    ],
-  },
-];
+
+      {
+        title: "Account",
+        items: [
+          {
+            icon: UserCircleIcon,
+            name: "Profile",
+            path: "/profile",
+          },
+        ],
+      },
+
+      {
+        title: "Menu",
+        items: [
+          {
+            icon: GridIcon,
+            name: "Dashboard",
+            path: "/",
+          },
+          {
+            icon: CalenderIcon,
+            name: "Calendar",
+            path: "/calendar",
+          },
+        ],
+      },
+    ];
+  }
+
+  return [];
+});
 
 const isActive = (path) => route.path === path;
 
@@ -349,7 +438,7 @@ const toggleSubmenu = (groupIndex, itemIndex) => {
 };
 
 const isAnySubmenuRouteActive = computed(() => {
-  return menuGroups.some((group) =>
+  return menuGroups.value.some((group) =>
     group.items.some(
       (item) =>
         item.subItems && item.subItems.some((subItem) => isActive(subItem.path))
@@ -359,11 +448,12 @@ const isAnySubmenuRouteActive = computed(() => {
 
 const isSubmenuOpen = (groupIndex, itemIndex) => {
   const key = `${groupIndex}-${itemIndex}`;
+
   return (
     openSubmenu.value === key ||
     (isAnySubmenuRouteActive.value &&
-      menuGroups[groupIndex].items[itemIndex].subItems?.some((subItem) =>
-        isActive(subItem.path)
+      menuGroups.value[groupIndex].items[itemIndex].subItems?.some(
+        (subItem) => isActive(subItem.path)
       ))
   );
 };
