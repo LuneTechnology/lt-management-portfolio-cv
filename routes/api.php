@@ -18,7 +18,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 Route::apiResource('roles', RoleController::class);
-Route::apiResource('category', CategoryController::class);
+Route::apiResource('categories', CategoryController::class);
 Route::apiResource('projects', ProjectController::class);
 Route::apiResource('link', LinkController::class);
 Route::apiResource('users', UserController::class);
