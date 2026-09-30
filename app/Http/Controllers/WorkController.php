@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class WorkController extends Controller
 {
-    public function index()
+   public function index()
     {
         $works = Work::with('workTag')->get();
 
