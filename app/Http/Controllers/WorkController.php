@@ -7,9 +7,10 @@ use Illuminate\Http\Request;
 
 class WorkController extends Controller
 {
-    public function index()
+   public function index()
     {
-        $works = Work::all();
+        // Ambil data work beserta relasi tag-nya
+        $works = Work::with('workTag')->get();
 
         return response()->json([
             'success' => true,
