@@ -9,12 +9,9 @@ class WorkController extends Controller
 {
     public function index()
     {
-        $works = Work::all();
+        $works = Work::with('workTag')->get();
 
-        return response()->json([
-            'success' => true,
-            'data'    => $works
-        ], 200);
+        return response()->json($works);
     }
 
     public function store(Request $request)
