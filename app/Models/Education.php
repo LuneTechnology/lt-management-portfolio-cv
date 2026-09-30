@@ -3,31 +3,39 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Education extends Model
 {
-    protected $table = 'education';
+    protected $table = 'educations';
 
     protected $primaryKey = 'id_education';
+
+    public $timestamps = false;
 
     protected $fillable = [
         'name',
         'major',
         'place',
-        'start_date',
-        'end_date',
+        'level',
+        'date_in',
+        'date_out',
         'gpa',
         'id_user',
     ];
 
     protected $casts = [
-        'start_date' => 'date',
-        'end_date' => 'date',
+        'date_in' => 'date',
+        'date_out' => 'date',
         'gpa' => 'decimal:2',
     ];
 
-    public function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'id_user', 'id_user');
+        return $this->belongsTo(
+            User::class,
+            'id_user',
+            'id_user'
+        );
     }
 }

@@ -265,7 +265,7 @@
             <common-grid-shape />
             <div class="flex flex-col items-center max-w-xs">
               <router-link to="/" class="block mb-4">
-                <img width="{231}" height="{48}" :src="'/images/logo/log-light-avra.png'" alt="Logo" />
+                <img width="{231}" height="{48}" :src="'/images/logo/logo-light-avra.png'" alt="Logo" />
               </router-link>
               <p class="text-center text-gray-400 dark:text-white/60">
                 "The best way to predict the future is to create it." - Abraham Lincoln
