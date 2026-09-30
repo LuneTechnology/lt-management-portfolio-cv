@@ -8,15 +8,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Education extends Model
 {
     protected $table = 'educations';
-
     protected $primaryKey = 'id_education';
 
     public $timestamps = false;
 
     protected $fillable = [
-        'name',
+        'id_work',
         'major',
-        'place',
         'level',
         'date_in',
         'date_out',
@@ -29,6 +27,15 @@ class Education extends Model
         'date_out' => 'date',
         'gpa' => 'decimal:2',
     ];
+
+    public function work(): BelongsTo
+    {
+        return $this->belongsTo(
+            Work::class,
+            'id_work',
+            'id_work'
+        );
+    }
 
     public function user(): BelongsTo
     {

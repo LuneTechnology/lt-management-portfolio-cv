@@ -11,9 +11,11 @@ return new class extends Migration
         Schema::create('educations', function (Blueprint $table) {
             $table->id('id_education');
 
-            $table->string('name');
-            $table->string('major');
-            $table->string('place');
+            $table->foreignId('id_work')
+                ->constrained('works', 'id_work')
+                ->restrictOnDelete();
+
+            $table->string('major', 50);
             $table->string('level', 20);
 
             $table->date('date_in');

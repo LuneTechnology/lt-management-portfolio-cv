@@ -10,18 +10,25 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RoleSeeder::class,
+            UserSeeder::class,
+
+            WorkTagSeeder::class,
+            WorkSeeder::class,
+
             AdminSeeder::class,
             CategorySeeder::class,
-            WorkSeeder::class,
             WorkTypeSeeder::class,
             PositionTypeSeeder::class,
+
             ProjectSeeder::class,
             LinkSeeder::class,
-            UserSeeder::class,
+
             EducationSeeder::class,
             ExperienceSeeder::class,
+
             TagSeeder::class,
             StackSeeder::class,
+
             TaskSeeder::class,
             ExperienceStackSeeder::class,
         ]);
