@@ -649,7 +649,11 @@ const photoPreview = ref(null)
 
 const search = ref('')
 const selectedRole = ref('')
-
+const emit = defineEmits([
+  'total-changed',
+  'edit',
+  'view',
+])
 
 /*
 |--------------------------------------------------------------------------
@@ -796,25 +800,26 @@ const handlePhotoChange = (event) => {
 */
 
 const fetchUsers = async () => {
-  loadingUsers.value = true
+  loading.value = true
 
   try {
-    const response =
-      await axios.get('/api/users')
+    const response = await axios.get('/api/users')
 
-    users.value =
-      Array.isArray(response.data)
-        ? response.data
-        : response.data?.data || []
+    users.value = Array.isArray(response.data)
+      ? response.data
+      : response.data?.data ?? []
+
+    emit('total-changed', users.value.length)
+
   } catch (error) {
-    console.error(
-      'Gagal mengambil data user:',
-      error
-    )
+    console.error('Failed to fetch users:', error)
 
     users.value = []
+
+    emit('total-changed', 0)
+
   } finally {
-    loadingUsers.value = false
+    loading.value = false
   }
 }
 
