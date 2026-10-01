@@ -4,104 +4,348 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
     /**
-     * READ SEMUA USER
+     * Pastikan hanya Super Admin yang boleh mengakses User Management.
+     */
+    private function authorizeSuperAdmin()
+    {
+        $user = Auth::guard('web')->user();
+
+        if (!$user || $user->id_role != 2) {
+            abort(403, 'Hanya Super Admin yang dapat mengakses User Management.');
+        }
+
+        return $user;
+    }
+
+
+    /**
+     * GET /api/users
      */
     public function index()
     {
-        $users = User::with('role')->get();
+        $this->authorizeSuperAdmin();
+
+        $users = User::with('role')
+            ->orderBy('id_user', 'desc')
+            ->get();
+
         return response()->json($users);
     }
 
+
     /**
-     *CREATED
+     * POST /api/users
      */
-        public function store(Request $request)
+    public function store(Request $request)
     {
+        $this->authorizeSuperAdmin();
+
         $validated = $request->validate([
-            'email'    => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
-            'username' => 'nullable|string|max:50',
-            'photo'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // max 2MB
-            'contact'  => 'nullable|string|max:255',
-            'aboutme'  => 'nullable|string',
-            'id_role'  => 'nullable|exists:role,id_role',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                'unique:users,email',
+            ],
+
+            'password' => [
+                'required',
+                'string',
+                'min:6',
+                'max:255',
+            ],
+
+            'username' => [
+                'nullable',
+                'string',
+                'max:50',
+            ],
+
+            'photo' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png',
+                'max:2048',
+            ],
+
+            'contact' => [
+                'nullable',
+                'string',
+                'max:255',
+            ],
+
+            'aboutme' => [
+                'nullable',
+                'string',
+            ],
+
+            'id_role' => [
+                'required',
+                'integer',
+                'exists:role,id_role',
+            ],
         ]);
 
-        $validated['password'] = Hash::make($validated['password']);
 
-        // Kalau ada file photo yang diupload
+        /*
+        |--------------------------------------------------------------------------
+        | Password
+        |--------------------------------------------------------------------------
+        */
+
+        $validated['password'] =
+            Hash::make($validated['password']);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Photo
+        |--------------------------------------------------------------------------
+        */
+
         if ($request->hasFile('photo')) {
-            $path = $request->file('photo')->store('photos', 'public');
-            $validated['photo'] = $path;
+
+            $validated['photo'] =
+                $request->file('photo')
+                    ->store('users', 'public');
         }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Create User
+        |--------------------------------------------------------------------------
+        */
 
         $user = User::create($validated);
 
-        return response()->json($user, 201);
+        return response()->json(
+            $user->load('role'),
+            201
+        );
     }
 
+
     /**
-     * READ SATU USER
+     * GET /api/users/{user}
      */
     public function show(string $id)
     {
-        $user = User::with('role')->findOrFail($id);
+        $this->authorizeSuperAdmin();
+
+        $user = User::with('role')
+            ->where('id_user', $id)
+            ->firstOrFail();
+
         return response()->json($user);
     }
 
+
     /**
-     * UPDATE
+     * PUT/PATCH /api/users/{user}
      */
-     public function update(Request $request, string $id)
-    {
-        $user = User::findOrFail($id);
+    public function update(
+        Request $request,
+        string $id
+    ) {
+        $currentUser =
+            $this->authorizeSuperAdmin();
+
+        $user = User::where(
+            'id_user',
+            $id
+        )->firstOrFail();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Validation
+        |--------------------------------------------------------------------------
+        */
 
         $validated = $request->validate([
-            'email'    => 'sometimes|email|unique:users,email,' . $id . ',id_user',
-            'password' => 'nullable|min:6',
-            'username' => 'nullable|string|max:50',
-            'photo'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'contact'  => 'nullable|string|max:255',
-            'aboutme'  => 'nullable|string',
-            'id_role'  => 'nullable|exists:role,id_role',
+            'email' => [
+                'sometimes',
+                'required',
+                'email',
+                'max:255',
+                'unique:users,email,' .
+                    $user->id_user .
+                    ',id_user',
+            ],
+
+            'password' => [
+                'nullable',
+                'string',
+                'min:6',
+                'max:255',
+            ],
+
+            'username' => [
+                'nullable',
+                'string',
+                'max:50',
+            ],
+
+            'photo' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png',
+                'max:2048',
+            ],
+
+            'contact' => [
+                'nullable',
+                'string',
+                'max:255',
+            ],
+
+            'aboutme' => [
+                'nullable',
+                'string',
+            ],
+
+            'id_role' => [
+                'sometimes',
+                'required',
+                'integer',
+                'exists:role,id_role',
+            ],
         ]);
 
-        if (!empty($validated['password'])) {
-            $validated['password'] = Hash::make($validated['password']);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Password
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            isset($validated['password']) &&
+            $validated['password'] !== ''
+        ) {
+
+            $validated['password'] =
+                Hash::make(
+                    $validated['password']
+                );
+
         } else {
+
             unset($validated['password']);
+
         }
 
-        if ($request->hasFile('photos')) {
-            // Hapus foto lama kalau ada, supaya tidak numpuk file sampah
-            if ($user->photo) {
-                Storage::disk('public')->delete($user->photo);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Photo
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->hasFile('photo')) {
+
+            if (
+                $user->photo &&
+                Storage::disk('public')->exists(
+                    $user->photo
+                )
+            ) {
+                Storage::disk('public')
+                    ->delete($user->photo);
             }
-            $path = $request->file('photos')->store('photos', 'public');
-            $validated['photos'] = $path;
-        } else {
-            unset($validated['photo']); // jangan timpa kalau tidak upload foto baru
+
+
+            $validated['photo'] =
+                $request->file('photo')
+                    ->store('users', 'public');
         }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Update
+        |--------------------------------------------------------------------------
+        */
 
         $user->update($validated);
 
-        return response()->json($user);
+        return response()->json(
+            $user->fresh()->load('role')
+        );
     }
 
+
     /**
-     * DELETE
+     * DELETE /api/users/{user}
      */
     public function destroy(string $id)
     {
-        $user = User::findOrFail($id);
+        $currentUser =
+            $this->authorizeSuperAdmin();
+
+        $user = User::where(
+            'id_user',
+            $id
+        )->firstOrFail();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Prevent deleting yourself
+        |--------------------------------------------------------------------------
+        |
+        | Supaya Super Admin tidak tidak sengaja menghapus
+        | akun yang sedang digunakan untuk login.
+        |
+        */
+
+        if (
+            $user->id_user ===
+            $currentUser->id_user
+        ) {
+            return response()->json([
+                'message' =>
+                    'Anda tidak dapat menghapus akun yang sedang digunakan.',
+            ], 422);
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Delete Photo
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            $user->photo &&
+            Storage::disk('public')->exists(
+                $user->photo
+            )
+        ) {
+            Storage::disk('public')
+                ->delete($user->photo);
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Delete User
+        |--------------------------------------------------------------------------
+        */
+
         $user->delete();
 
-        return response()->json(['message' => 'User deleted successfully']);
+        return response()->json([
+            'message' =>
+                'User berhasil dihapus.',
+        ]);
     }
 }

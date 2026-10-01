@@ -259,11 +259,6 @@ const menuGroups = computed(() => {
                 pro: false,
               },
               {
-                name: "Work",
-                path: "/works",
-                pro: false,
-              },
-              {
                 name: "Experience",
                 path: "/experiences",
                 pro: false,
@@ -327,18 +322,13 @@ const menuGroups = computed(() => {
             name: "Management",
             subItems: [
               {
-                name: "Admins",
+                name: "Users",
                 path: "/users",
                 pro: false,
               },
               {
                 name: "Education",
                 path: "/educations",
-                pro: false,
-              },
-              {
-                name: "Work",
-                path: "/works",
                 pro: false,
               },
               {
@@ -373,6 +363,11 @@ const menuGroups = computed(() => {
             icon: TableIcon,
             name: "Master Data",
             subItems: [
+              {
+                name: "Work",
+                path: "/works",
+                pro: false,
+              },
               {
                 name: "Position Type",
                 path: "/position-types",

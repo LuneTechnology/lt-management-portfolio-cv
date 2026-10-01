@@ -23,9 +23,11 @@ const router = createRouter({
     {
       path: '/users',
       name: 'Users',
-      component: () => import('../views/Management/User/User.vue'),
+      component: () =>
+        import('../views/Management/User/User.vue'),
       meta: {
-        title: 'User',
+        requiresAuth: true,
+        superAdminOnly: true,
       },
     },
     {
@@ -226,38 +228,44 @@ const router = createRouter({
 
 export default router
 
-router.beforeEach(async (to, _from, next) => {
-  document.title = `${to.meta.title ?? 'Lune'} | Lune`
-
+router.beforeEach(async (to, from) => {
   const {
     user,
-    fetchUser,
     initialized,
+    fetchUser,
   } = useAuth()
 
-  // Cek session Laravel hanya sekali
   if (!initialized.value) {
     await fetchUser()
   }
 
-  const isAuthenticated = user.value !== null
-
-  // Halaman login
-  if (to.path === '/signin') {
-    if (isAuthenticated) {
-      next({ name: 'Ecommerce' })
-    } else {
-      next()
+  // Belum login
+  if (
+    to.meta.requiresAuth &&
+    !user.value
+  ) {
+    return {
+      name: 'Signin',
     }
-
-    return
   }
 
-  // Semua halaman lain membutuhkan login
-  if (!isAuthenticated) {
-    next('/signin')
-    return
+  // Sudah login tapi halaman khusus Super Admin
+  if (
+    to.meta.superAdminOnly &&
+    user.value?.role?.name !== 'Super Admin'
+  ) {
+    return {
+      name: 'Ecommerce',
+    }
   }
 
-  next()
+  // Sudah login dan mencoba buka signin
+  if (
+    to.name === 'Signin' &&
+    user.value
+  ) {
+    return {
+      name: 'Ecommerce',
+    }
+  }
 })
