@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AchievementController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProjectController;
@@ -31,6 +32,7 @@ Route::apiResource('experience-stacks', ExperienceStackController::class);
 Route::apiResource('tasks', TaskController::class);
 Route::apiResource('stacks', StackController::class);
 Route::apiResource('tags', TagController::class);
+Route::apiResource('achievements', AchievementController::class);
 
 
 // Authentication routes
