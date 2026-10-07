@@ -6,10 +6,10 @@
 
       <!-- Summary -->
       <ManagementSummaryCard
-        title="Total Work Experience"
+        title="Total Work"
         :value="totalWork"
         :icon="DocsIcon"
-        quote="Experience is the teacher of all things."
+        quote="Every role is a step toward growth."
         :change="1"
         color="blue"
       />
@@ -39,13 +39,13 @@
                 <h3
                   class="text-lg font-semibold text-gray-800 dark:text-white/90"
                 >
-                  Work Experience List
+                  Work List
                 </h3>
 
                 <p
                   class="text-sm text-gray-500 dark:text-gray-400"
                 >
-                  View, add, edit, or delete your work experience background.
+                  View, add, edit, or delete your work background.
                 </p>
               </div>
 
@@ -57,7 +57,7 @@
               @click="addWork"
             >
               <span class="text-lg leading-none">+</span>
-              Add Work Experience
+              Add Work
             </button>
 
           </div>
@@ -82,7 +82,7 @@ import WorkTable from '@/components/tables/management/WorkTable.vue'
 
 import { DocsIcon } from '@/icons'
 
-const currentPageTitle = ref('Work Experience')
+const currentPageTitle = ref('Work')
 
 const totalWork = ref(0)
 

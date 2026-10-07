@@ -12,8 +12,4 @@ class PositionType extends Model
     [
         'name'
     ];
-    
-    //syntax lain
-    // protected $primaryKey = 'id_position_type';
-    // protected $guarded = ['id_position_type'];
 }

@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 
 class ExperienceController extends Controller
 {
-    // READ - semua experience beserta relasinya
+    /**
+     * Display all experiences.
+     */
     public function index()
     {
         $experiences = Experience::with([
@@ -15,76 +17,167 @@ class ExperienceController extends Controller
             'work',
             'positionType',
             'workType',
-            'project'
-        ])->get();
+            'project',
+        ])
+        ->orderByDesc('id_experience')
+        ->get();
 
         return response()->json([
             'success' => true,
-            'data'    => $experiences
-        ], 200);
+            'data' => $experiences,
+        ]);
     }
 
-    // CREATE
+    /**
+     * Store a new experience.
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'id_user'          => 'required|exists:users,id_user',
-            'id_work'          => 'required|exists:works,id_work',
-            'id_position_type' => 'required|exists:position_types,id_position_type',
-            'id_work_type'     => 'required|exists:work_types,id_work_type',
-            'id_project'       => 'required|exists:projects,id_project',
+            'id_user' => [
+                'required',
+                'integer',
+                'exists:users,id_user',
+            ],
+
+            'id_work' => [
+                'required',
+                'integer',
+                'exists:works,id_work',
+            ],
+
+            'id_position_type' => [
+                'required',
+                'integer',
+                'exists:position_types,id_position_type',
+            ],
+
+            'id_work_type' => [
+                'required',
+                'integer',
+                'exists:work_types,id_work_type',
+            ],
+
+            'id_project' => [
+                'required',
+                'integer',
+                'exists:projects,id_project',
+            ],
         ]);
 
-        $experience = Experience::create($validated);
-        $experience->load(['user', 'work', 'positionType', 'workType', 'project']);
+        $experience = Experience::create(
+            $validated
+        );
+
+        // Return with all relations
+        $experience->load([
+            'user',
+            'work',
+            'positionType',
+            'workType',
+            'project',
+        ]);
 
         return response()->json([
             'success' => true,
-            'message' => 'Experience created successfully',
-            'data'    => $experience
+            'message' => 'Experience created successfully.',
+            'data' => $experience,
         ], 201);
     }
 
-    // READ - satu experience
-    public function show(Experience $experience)
+    /**
+     * Display a specific experience.
+     */
+    public function show($id)
     {
-        $experience->load(['user', 'work', 'positionType', 'workType', 'project']);
+        $experience = Experience::with([
+            'user',
+            'work',
+            'positionType',
+            'workType',
+            'project',
+        ])->findOrFail($id);
 
         return response()->json([
             'success' => true,
-            'data'    => $experience
-        ], 200);
+            'data' => $experience,
+        ]);
     }
 
-    // UPDATE
-    public function update(Request $request, Experience $experience)
-    {
+    /**
+     * Update an experience.
+     */
+    public function update(
+        Request $request,
+        $id
+    ) {
+        $experience =
+            Experience::findOrFail($id);
+
         $validated = $request->validate([
-            'id_user'          => 'sometimes|required|exists:users,id_user',
-            'id_work'          => 'sometimes|required|exists:works,id_work',
-            'id_position_type' => 'sometimes|required|exists:position_types,id_position_type',
-            'id_work_type'     => 'sometimes|required|exists:work_types,id_work_type',
-            'id_project'       => 'sometimes|required|exists:projects,id_project',
+            'id_user' => [
+                'required',
+                'integer',
+                'exists:users,id_user',
+            ],
+
+            'id_work' => [
+                'required',
+                'integer',
+                'exists:works,id_work',
+            ],
+
+            'id_position_type' => [
+                'required',
+                'integer',
+                'exists:position_types,id_position_type',
+            ],
+
+            'id_work_type' => [
+                'required',
+                'integer',
+                'exists:work_types,id_work_type',
+            ],
+
+            'id_project' => [
+                'required',
+                'integer',
+                'exists:projects,id_project',
+            ],
         ]);
 
-        $experience->update($validated);
-        $experience->load(['user', 'work', 'positionType', 'workType', 'project']);
+        $experience->update(
+            $validated
+        );
+
+        $experience->load([
+            'user',
+            'work',
+            'positionType',
+            'workType',
+            'project',
+        ]);
 
         return response()->json([
             'success' => true,
-            'message' => 'Experience updated successfully',
-            'data'    => $experience
-        ], 200);
+            'message' => 'Experience updated successfully.',
+            'data' => $experience,
+        ]);
     }
 
-    // DELETE
-    public function destroy(Experience $experience)
+    /**
+     * Delete an experience.
+     */
+    public function destroy($id)
     {
+        $experience =
+            Experience::findOrFail($id);
+
         $experience->delete();
 
         return response()->json([
             'success' => true,
-            'message' => 'Experience deleted successfully'
-        ], 200);
+            'message' => 'Experience deleted successfully.',
+        ]);
     }
 }

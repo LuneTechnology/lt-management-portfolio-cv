@@ -17,7 +17,7 @@
         <input
           v-model="search"
           type="text"
-          placeholder="Search work experience..."
+          placeholder="Search work..."
           class="h-11 w-full rounded-lg border border-gray-200 bg-white pl-11 pr-4 text-sm text-gray-800 outline-none transition focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
         />
       </div>
@@ -98,7 +98,7 @@
               colspan="5"
               class="px-6 py-12 text-center text-sm text-gray-500"
             >
-              Loading work experience...
+              Loading work...
             </td>
           </tr>
 
@@ -108,7 +108,7 @@
               colspan="5"
               class="px-6 py-12 text-center text-sm text-gray-500"
             >
-              No work experience found.
+              No work found.
             </td>
           </tr>
 
@@ -362,7 +362,7 @@ const viewWork = (work: Work) => {
 
 const deleteWork = async (id: number) => {
   const confirmed = window.confirm(
-    'Are you sure you want to delete this work experience?'
+    'Are you sure you want to delete this work?'
   )
 
   if (!confirmed) return

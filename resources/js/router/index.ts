@@ -217,8 +217,8 @@ const router = createRouter({
       },
     },
     {
-      path: '/worktypes',
-      name: 'Work Types',
+      path: '/work-types',
+      name: 'WorkTypes',
       component: () => import('../views/Management/WorkType/WorkType.vue'),
       meta: {
         requiresAuth: true,

@@ -19,10 +19,6 @@ class Experience extends Model
         'id_project'
     ];
 
-    //syntax lain
-    // protected $primaryKey = 'id_experience';
-    // protected $guarded = ['id_experience'];
-
     public function work() { return $this->belongsTo(Work::class, 'id_work'); }
     public function positionType() { return $this->belongsTo(PositionType::class, 'id_position_type'); }
     public function workType() { return $this->belongsTo(WorkType::class, 'id_work_type'); }
