@@ -51,19 +51,22 @@
       <nav class="mb-6">
         <div class="flex flex-col gap-4">
           <div v-for="(menuGroup, groupIndex) in menuGroups" :key="groupIndex">
+            <!-- tambahkan if untuk H2  -->
             <h2
               :class="[
                 'mb-4 text-xs uppercase flex leading-[20px] text-gray-400',
                 !isExpanded && !isHovered
                   ? 'lg:justify-center'
                   : 'justify-start',
+                // is null or empty string, hide the h2
+                !menuGroup.title ? 'hidden' : '',
               ]"
             >
               <template v-if="isExpanded || isHovered || isMobileOpen">
                 {{ menuGroup.title }}
               </template>
               <HorizontalDots v-else />
-            </h2>
+            </h2> 
             <ul class="flex flex-col gap-4">
               <li v-for="(item, index) in menuGroup.items" :key="item.name">
                 <button
@@ -244,151 +247,107 @@ const { user } = useAuth();
 const menuGroups = computed(() => {
   const roleId = user.value?.id_role;
 
-  if (roleId === 1) {
+  const managementItems = [
+    {
+      name: "Education",
+      path: "/educations",
+      pro: false,
+    },
+    {
+      name: "Experience",
+      path: "/experiences",
+      pro: false,
+    },
+    {
+      name: "Project",
+      path: "/projects",
+      pro: false,
+    },
+    {
+      name: "Achievement",
+      path: "/achievements",
+      pro: false,
+    },
+  ];
+
+  // Super Admin dapat mengelola User
+  if (roleId === 2) {
+    managementItems.unshift({
+      name: "User",
+      path: "/users",
+      pro: false,
+    });
+  }
+
+  const masterDataItems = [
+    {
+      name: "Work",
+      path: "/works",
+      pro: false,
+    },
+    {
+      name: "Work Tag",
+      path: "/work-tags",
+      pro: false,
+    },
+    {
+      name: "Position Type",
+      path: "/position-types",
+      pro: false,
+    },
+    {
+      name: "Work Type",
+      path: "/work-types",
+      pro: false,
+    },
+    {
+      name: "Category",
+      path: "/category",
+      pro: false,
+    },
+    {
+      name: "Tag",
+      path: "/tags",
+      pro: false,
+    },
+    {
+      name: "Stack",
+      path: "/stack",
+      pro: false,
+    },
+  ];
+
+  if (roleId === 1 || roleId === 2) {
     return [
       {
-        title: "Management",
-        items: [
-          {
-            icon: TableIcon,
-            name: "Management",
-            subItems: [
-              {
-                name: "Education",
-                path: "/educations",
-                pro: false,
-              },
-              {
-                name: "Experience",
-                path: "/experiences",
-                pro: false,
-              },
-              {
-                name: "Project",
-                path: "/projects",
-                pro: false,
-              },
-              {
-                name: "Achievement",
-                path: "/achievements",
-                pro: false,
-              },
-              {
-                name: "Skills",
-                path: "/stack",
-                pro: false,
-              },
-            ],
-          },
-        ],
-      },
-
-      {
-        title: "Account",
-        items: [
-          {
-            icon: UserCircleIcon,
-            name: "Profile",
-            path: "/profile",
-          },
-        ],
-      },
-
-      {
-        title: "Menu",
+        title: "",
         items: [
           {
             icon: GridIcon,
             name: "Dashboard",
             path: "/",
           },
-          {
-            icon: CalenderIcon,
-            name: "Calendar",
-            path: "/calendar",
-          },
         ],
       },
-    ];
-  }
 
-  if (roleId === 2) {
-    return [
       {
-        title: "Management",
+        title: "",
         items: [
           {
             icon: TableIcon,
             name: "Management",
-            subItems: [
-              {
-                name: "Users",
-                path: "/users",
-                pro: false,
-              },
-              {
-                name: "Education",
-                path: "/educations",
-                pro: false,
-              },
-              {
-                name: "Experience",
-                path: "/experiences",
-                pro: false,
-              },
-              {
-                name: "Project",
-                path: "/projects",
-                pro: false,
-              },
-              {
-                name: "Achievement",
-                path: "/achievements",
-                pro: false,
-              },
-              {
-                name: "Skills",
-                path: "/stack",
-                pro: false,
-              },
-            ],
+            subItems: managementItems,
           },
         ],
       },
 
       {
-        title: "Master Data",
+        title: "",
         items: [
           {
             icon: TableIcon,
             name: "Master Data",
-            subItems: [
-              {
-                name: "Work",
-                path: "/works",
-                pro: false,
-              },
-              {
-                name: "Position Type",
-                path: "/position-types",
-                pro: false,
-              },
-              {
-                name: "Work Type",
-                path: "/work-types",
-                pro: false,
-              },
-              {
-                name: "Category",
-                path: "/category",
-                pro: false,
-              },
-              {
-                name: "Tag",
-                path: "/tags",
-                pro: false,
-              },
-            ],
+            subItems: masterDataItems,
           },
         ],
       },
@@ -408,14 +367,14 @@ const menuGroups = computed(() => {
         title: "Menu",
         items: [
           {
-            icon: GridIcon,
-            name: "Dashboard",
-            path: "/",
-          },
-          {
             icon: CalenderIcon,
             name: "Calendar",
             path: "/calendar",
+          },
+          {
+            icon: GridIcon,
+            name: "Settings",
+            path: "/settings",
           },
         ],
       },

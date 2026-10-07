@@ -12,6 +12,7 @@ const router = createRouter({
       name: 'Ecommerce',
       component: () => import('../views/Ecommerce.vue'),
       meta: {
+        requiresAuth: true,
         title: 'eCommerce Dashboard',
       },
     },
@@ -156,22 +157,35 @@ const router = createRouter({
       path: '/stack',
       name: 'Stack',
       component: () => import('../views/Management/Stack/Stack.vue'),
+      meta: {
+        requiresAuth: true,
+        title: 'Stack Management',
+      },
     },
     {
       path: '/category',
       name: 'Category',
       component: () => import('../views/Management/Category/Category.vue'),
+      meta: {
+        requiresAuth: true,
+        title: 'Category Management',
+      },
     },
     {
       path: '/tags',
       name: 'Tags',
       component: () => import('../views/Management/Tag/Tag.vue'),
+      meta: {
+        requiresAuth: true,
+        title: 'Tag Management',
+      },
     },
     {
       path: '/experiences',
       name: 'Experience',
       component: () => import('../views/Management/Experience/Experience.vue'),
       meta: {
+        requiresAuth: true,
         title: 'Experience Management',
       },
     },
@@ -180,6 +194,7 @@ const router = createRouter({
       name: 'Work',
       component: () => import('../views/Management/Work/Work.vue'),
       meta: {
+        requiresAuth: true,
         title: 'Work Management',
       },
     },
@@ -188,6 +203,7 @@ const router = createRouter({
       name: 'Experience Stack',
       component: () => import('../views/Management/ExperienceStack/ExperienceStack.vue'),
       meta: {
+        requiresAuth: true,
         title: 'Experience Stack Management',
       },
     },
@@ -196,6 +212,7 @@ const router = createRouter({
       name: 'Position Types',
       component: () => import('../views/Management/PositionType/PositionType.vue'),
       meta: {
+        requiresAuth: true,
         title: 'Position Type Management',
       },
     },
@@ -204,6 +221,7 @@ const router = createRouter({
       name: 'Work Types',
       component: () => import('../views/Management/WorkType/WorkType.vue'),
       meta: {
+        requiresAuth: true,
         title: 'Work Type Management',
       },
     },
@@ -212,6 +230,7 @@ const router = createRouter({
       name: 'Tasks',
       component: () => import('../views/Management/Task/Task.vue'),
       meta: {
+        requiresAuth: true,
         title: 'Task Management',
       },
     },
@@ -220,6 +239,7 @@ const router = createRouter({
       name: 'Education',
       component: () => import('../views/Management/Education/Education.vue'),
       meta: {
+        requiresAuth: true,
         title: 'Education Management',
       },
     },
