@@ -133,6 +133,12 @@
             <th
               class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500"
             >
+              Person
+            </th>
+
+            <th
+              class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500"
+            >
               Institution
             </th>
 
@@ -223,6 +229,17 @@
               {{ index + 1 }}
             </td>
 
+            <!-- Person -->
+            <td class="px-6 py-5">
+              <div>
+
+                <p
+                  class="font-semibold text-gray-800 dark:text-white/90"
+                >
+                  {{ education.user?.username ?? '-' }}
+                </p>
+              </div>
+            </td>
 
             <!-- Institution -->
             <td class="px-6 py-5">

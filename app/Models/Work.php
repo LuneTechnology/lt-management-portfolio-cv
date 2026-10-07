@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Work extends Model
 {
     protected $table = 'works';
+
     protected $primaryKey = 'id_work';
 
     protected $fillable = [

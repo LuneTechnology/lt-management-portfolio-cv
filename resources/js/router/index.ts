@@ -20,6 +20,10 @@ const router = createRouter({
       path: '/products',
       name: 'Products',
       component: () => import('../views/Products/Products.vue'),
+      meta: {
+        requiresAuth: true,
+        title: 'Products',
+      }
     },
     {
       path: '/users',
@@ -249,6 +253,7 @@ const router = createRouter({
   component: () => import('../views/Management/Achievement/Achievement.vue'),
   meta: {
     title: 'Achievement Management',
+    requiresAuth: true,
   },
 },
   ],

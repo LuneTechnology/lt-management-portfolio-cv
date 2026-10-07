@@ -4,63 +4,91 @@ namespace App\Http\Controllers;
 
 use App\Models\Work;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\QueryException;
 
 class WorkController extends Controller
 {
-   public function index()
+    private function authorizeSuperAdmin(): void
     {
-        $works = Work::with('workTag')->get();
+        $user = Auth::guard('web')->user();
 
-        return response()->json($works);
+        abort_unless(
+            $user && $user->id_role == 2,
+            403,
+            'Only Super Admin can manage work data.'
+        );
+    }
+
+    public function index()
+    {
+        return response()->json(
+            Work::with('workTag')
+                ->orderBy('id_work', 'desc')
+                ->get()
+        );
     }
 
     public function store(Request $request)
     {
+        $this->authorizeSuperAdmin();
+
         $validated = $request->validate([
-            'name'  => 'required|string|max:255',
-            'place' => 'nullable|string|max:255',
+            'name' => 'required|string|max:50',
+            'place' => 'required|string|max:50',
+            'id_work_tag' => 'required|integer|exists:work_tags,id_work_tag',
         ]);
 
         $work = Work::create($validated);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Work created successfully',
-            'data'    => $work
-        ], 201);
+        return response()->json(
+            $work->load('workTag'),
+            201
+        );
     }
 
-    public function show(Work $work)
+    public function show(string $id)
     {
-        return response()->json([
-            'success' => true,
-            'data'    => $work
-        ], 200);
+        return response()->json(
+            Work::with('workTag')->findOrFail($id)
+        );
     }
 
-    public function update(Request $request, Work $work)
+    public function update(Request $request, string $id)
     {
+        $this->authorizeSuperAdmin();
+
+        $work = Work::findOrFail($id);
+
         $validated = $request->validate([
-            'name'  => 'sometimes|required|string|max:255',
-            'place' => 'nullable|string|max:255',
+            'name' => 'required|string|max:50',
+            'place' => 'required|string|max:50',
+            'id_work_tag' => 'required|integer|exists:work_tags,id_work_tag',
         ]);
 
         $work->update($validated);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Work updated successfully',
-            'data'    => $work
-        ], 200);
+        return response()->json(
+            $work->load('workTag')
+        );
     }
 
-    public function destroy(Work $work)
+    public function destroy(string $id)
     {
-        $work->delete();
+        $this->authorizeSuperAdmin();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Work deleted successfully'
-        ], 200);
+        $work = Work::findOrFail($id);
+
+        try {
+            $work->delete();
+
+            return response()->json([
+                'message' => 'Work deleted successfully.',
+            ]);
+        } catch (QueryException $e) {
+            return response()->json([
+                'message' => 'This work cannot be deleted because it is still being used by Education or Experience.',
+            ], 409);
+        }
     }
 }
