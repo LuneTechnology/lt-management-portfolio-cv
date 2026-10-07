@@ -70,4 +70,4 @@ class CategoryController extends Controller
             'message' => 'Category deleted successfully'
         ], 200);
     }
-}
+}   

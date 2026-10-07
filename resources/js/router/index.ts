@@ -223,6 +223,14 @@ const router = createRouter({
         title: 'Education Management',
       },
     },
+    {
+  path: '/achievements',
+  name: 'Achievement',
+  component: () => import('../views/Management/Achievement/Achievement.vue'),
+  meta: {
+    title: 'Achievement Management',
+  },
+},
   ],
 })
 
