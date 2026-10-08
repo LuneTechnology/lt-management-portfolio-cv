@@ -12,8 +12,8 @@ return new class extends Migration
             $table->id('id_stack');
             $table->string('nama');
 
-            $table->foreignId('id_tag')
-                ->constrained('tag', 'id_tag')
+            $table->foreignId('id_stack_type')
+                ->constrained('stack_types', 'id_stack_type')
                 ->restrictOnDelete();
         });
     }

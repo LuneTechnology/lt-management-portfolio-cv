@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <!-- ===================================================== -->
     <!-- FILTER -->
     <!-- ===================================================== -->
@@ -8,10 +7,8 @@
     <div
       class="flex flex-col gap-3 border-b border-gray-200 px-6 py-5 dark:border-gray-800 xl:flex-row xl:items-center xl:justify-between"
     >
-
       <!-- Search -->
       <div class="relative w-full xl:max-w-md">
-
         <span
           class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
         >
@@ -21,83 +18,34 @@
         <input
           v-model="search"
           type="text"
-          placeholder="Search work..."
+          placeholder="Search stack type..."
           class="h-11 w-full rounded-lg border border-gray-200 bg-white pl-11 pr-4 text-sm text-gray-800 outline-none transition focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
         />
-
       </div>
 
-
-      <!-- Filters -->
-      <div class="flex flex-col gap-3 sm:flex-row">
-
-        <!-- Work Tag -->
-        <select
-          v-model="selectedTag"
-          class="h-11 rounded-lg border border-gray-200 bg-white px-4 text-sm text-gray-700 outline-none transition focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
-        >
-          <option value="">
-            All Work Tags
-          </option>
-
-          <option
-            v-for="tag in tags"
-            :key="tag"
-            :value="tag"
-          >
-            {{ tag }}
-          </option>
-        </select>
-
-
-        <!-- Sort -->
-        <select
-          v-model="sortBy"
-          class="h-11 rounded-lg border border-gray-200 bg-white px-4 text-sm text-gray-700 outline-none transition focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
-        >
-          <option value="newest">
-            Newest
-          </option>
-
-          <option value="oldest">
-            Oldest
-          </option>
-
-          <option value="name">
-            Name
-          </option>
-        </select>
-
-
-        <!-- Reset -->
+      <!-- Reset -->
+      <div>
         <button
           type="button"
           class="h-11 rounded-lg border border-gray-200 px-4 text-sm font-medium text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/[0.03]"
-          @click="resetFilters"
+          @click="resetSearch"
         >
           ↻ Reset
         </button>
-
       </div>
-
     </div>
-
 
     <!-- ===================================================== -->
     <!-- TABLE -->
     <!-- ===================================================== -->
 
     <div class="overflow-x-auto">
-
-      <table class="w-full min-w-[850px]">
-
+      <table class="w-full min-w-[600px]">
         <!-- Header -->
         <thead>
-
           <tr
             class="border-b border-gray-200 bg-gray-50/70 dark:border-gray-800 dark:bg-white/[0.02]"
           >
-
             <th
               class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500"
             >
@@ -107,19 +55,7 @@
             <th
               class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500"
             >
-              Work
-            </th>
-
-            <th
-              class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500"
-            >
-              Place
-            </th>
-
-            <th
-              class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500"
-            >
-              Work Tag
+              Stack Type
             </th>
 
             <th
@@ -127,49 +63,38 @@
             >
               Actions
             </th>
-
           </tr>
-
         </thead>
-
 
         <!-- Body -->
         <tbody>
-
           <!-- Loading -->
           <tr v-if="loading">
-
             <td
-              colspan="5"
+              colspan="3"
               class="px-6 py-12 text-center text-sm text-gray-500"
             >
-              Loading works...
+              Loading stack types...
             </td>
-
           </tr>
-
 
           <!-- Empty -->
-          <tr v-else-if="filteredWorks.length === 0">
-
+          <tr v-else-if="filteredStackTypes.length === 0">
             <td
-              colspan="5"
+              colspan="3"
               class="px-6 py-12 text-center text-sm text-gray-500"
             >
-              No work found.
+              No stack type found.
             </td>
-
           </tr>
-
 
           <!-- Data -->
           <tr
-            v-for="(work, index) in filteredWorks"
+            v-for="(stackType, index) in filteredStackTypes"
             v-else
-            :key="work.id_work"
+            :key="stackType.id_stack_type"
             class="border-b border-gray-100 transition hover:bg-gray-50/70 dark:border-gray-800 dark:hover:bg-white/[0.02]"
           >
-
             <!-- Number -->
             <td
               class="px-6 py-5 text-sm font-medium text-gray-700 dark:text-gray-300"
@@ -177,71 +102,38 @@
               {{ index + 1 }}
             </td>
 
-
-            <!-- Work -->
+            <!-- Name -->
             <td class="px-6 py-5">
-
               <p
                 class="font-semibold text-gray-800 dark:text-white/90"
               >
-                {{ work.name }}
+                {{ stackType.name }}
               </p>
-
             </td>
-
-
-            <!-- Place -->
-            <td class="px-6 py-5">
-
-              <p
-                class="text-sm text-gray-600 dark:text-gray-400"
-              >
-                📍 {{ work.place }}
-              </p>
-
-            </td>
-
-
-            <!-- Work Tag -->
-            <td class="px-6 py-5">
-
-              <span
-                class="inline-flex rounded-full px-3 py-1 text-xs font-medium"
-                :class="getTagClass(work.work_tag?.name)"
-              >
-                {{ work.work_tag?.name || '-' }}
-              </span>
-
-            </td>
-
 
             <!-- Actions -->
             <td class="px-6 py-5">
-
               <div class="flex justify-end gap-2">
-
                 <!-- Edit -->
                 <button
                   v-if="isSuperAdmin()"
                   type="button"
                   title="Edit"
                   class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-400"
-                  @click="editWork(work)"
+                  @click="emit('edit', stackType)"
                 >
                   ✎
                 </button>
-
 
                 <!-- View -->
                 <button
                   type="button"
                   title="View"
                   class="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400"
-                  @click="viewWork(work)"
+                  @click="emit('view', stackType)"
                 >
                   👁
                 </button>
-
 
                 <!-- Delete -->
                 <button
@@ -249,23 +141,16 @@
                   type="button"
                   title="Delete"
                   class="flex h-9 w-9 items-center justify-center rounded-lg bg-red-50 text-red-600 transition hover:bg-red-100 dark:bg-red-500/10 dark:text-red-400"
-                  @click="deleteWork(work)"
+                  @click="emit('delete', stackType)"
                 >
                   🗑
                 </button>
-
               </div>
-
             </td>
-
           </tr>
-
         </tbody>
-
       </table>
-
     </div>
-
 
     <!-- ===================================================== -->
     <!-- FOOTER -->
@@ -274,18 +159,13 @@
     <div
       class="flex flex-col gap-3 border-t border-gray-200 px-6 py-4 sm:flex-row sm:items-center sm:justify-between dark:border-gray-800"
     >
-
-      <p
-        class="text-sm text-gray-500 dark:text-gray-400"
-      >
-        Showing {{ filteredWorks.length }}
-        of {{ works.length }} results
+      <p class="text-sm text-gray-500 dark:text-gray-400">
+        Showing {{ filteredStackTypes.length }}
+        of {{ stackTypes.length }} results
       </p>
-
 
       <!-- Pagination placeholder -->
       <div class="flex items-center gap-2">
-
         <button
           type="button"
           disabled
@@ -308,160 +188,164 @@
         >
           ›
         </button>
-
       </div>
-
     </div>
-
   </div>
 </template>
+
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import {
+  computed,
+  onMounted,
+  ref,
+  watch,
+} from 'vue'
+
 import axios from '@/services/axios'
+
 import { useAuth } from '@/composables/useAuth'
 
-interface WorkTag {
-  id_work_tag: number
-  name: string
-}
-
-interface Work {
-  id_work: number
-  name: string
-  place: string
-  id_work_tag: number | null
-  work_tag?: WorkTag | null
-}
+/*
+|--------------------------------------------------------------------------
+| Props
+|--------------------------------------------------------------------------
+*/
 
 const props = defineProps<{
-  refreshKey?: number
+  refreshKey: number
 }>()
+
+/*
+|--------------------------------------------------------------------------
+| Emits
+|--------------------------------------------------------------------------
+*/
 
 const emit = defineEmits<{
   (event: 'total-changed', total: number): void
-  (event: 'edit', work: Work): void
-  (event: 'view', work: Work): void
-  (event: 'delete', work: Work): void
+  (event: 'edit', stackType: StackType): void
+  (event: 'view', stackType: StackType): void
+  (event: 'delete', stackType: StackType): void
 }>()
+
+/*
+|--------------------------------------------------------------------------
+| Auth
+|--------------------------------------------------------------------------
+*/
 
 const { isSuperAdmin } = useAuth()
 
-const works = ref<Work[]>([])
+/*
+|--------------------------------------------------------------------------
+| Interface
+|--------------------------------------------------------------------------
+*/
+
+interface StackType {
+  id_stack_type: number
+  name: string
+}
+
+/*
+|--------------------------------------------------------------------------
+| State
+|--------------------------------------------------------------------------
+*/
+
+const stackTypes = ref<StackType[]>([])
+
 const loading = ref(true)
 
 const search = ref('')
-const selectedTag = ref('')
-const sortBy = ref('newest')
 
-const tags = computed(() => {
-  return [
-    ...new Set(
-      works.value
-        .map((work) => work.work_tag?.name)
-        .filter((name): name is string => Boolean(name))
-    ),
-  ]
+/*
+|--------------------------------------------------------------------------
+| Filter
+|--------------------------------------------------------------------------
+*/
+
+const filteredStackTypes = computed(() => {
+  const keyword = search.value
+    .toLowerCase()
+    .trim()
+
+  if (!keyword) {
+    return stackTypes.value
+  }
+
+  return stackTypes.value.filter(
+    (stackType) =>
+      stackType.name
+        .toLowerCase()
+        .includes(keyword)
+  )
 })
 
-const filteredWorks = computed(() => {
-  let result = [...works.value]
+/*
+|--------------------------------------------------------------------------
+| Fetch
+|--------------------------------------------------------------------------
+*/
 
-  if (search.value.trim()) {
-    const keyword = search.value.toLowerCase()
-
-    result = result.filter(
-      (work) =>
-        work.name.toLowerCase().includes(keyword) ||
-        work.place?.toLowerCase().includes(keyword) ||
-        work.work_tag?.name.toLowerCase().includes(keyword)
-    )
-  }
-
-  if (selectedTag.value) {
-    result = result.filter(
-      (work) => work.work_tag?.name === selectedTag.value
-    )
-  }
-
-  if (sortBy.value === 'newest') {
-    result.sort((a, b) => b.id_work - a.id_work)
-  }
-
-  if (sortBy.value === 'oldest') {
-    result.sort((a, b) => a.id_work - b.id_work)
-  }
-
-  if (sortBy.value === 'name') {
-    result.sort((a, b) => a.name.localeCompare(b.name))
-  }
-
-  return result
-})
-
-const fetchWorks = async () => {
+const fetchStackTypes = async () => {
   loading.value = true
 
   try {
-    const response = await axios.get('/api/works')
+    const response = await axios.get(
+      '/api/stack-types'
+    )
 
-    const data = response.data.data ?? response.data
+    const data =
+      response.data.data ??
+      response.data
 
-    works.value = data
+    stackTypes.value = data
 
-    emit('total-changed', works.value.length)
+    emit(
+      'total-changed',
+      stackTypes.value.length
+    )
   } catch (error) {
-    console.error('Failed to fetch works:', error)
+    console.error(
+      'Failed to fetch stack types:',
+      error
+    )
   } finally {
     loading.value = false
   }
 }
 
-const getTagClass = (tagName?: string) => {
-  switch (tagName?.toUpperCase()) {
-    case 'COMPANY':
-      return 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400'
+/*
+|--------------------------------------------------------------------------
+| Reset
+|--------------------------------------------------------------------------
+*/
 
-    case 'EDUCATION':
-      return 'bg-cyan-50 text-cyan-600 dark:bg-cyan-500/10 dark:text-cyan-400'
-
-    case 'ORGANIZATION':
-      return 'bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400'
-
-    case 'COMMUNITY':
-      return 'bg-purple-50 text-purple-600 dark:bg-purple-500/10 dark:text-purple-400'
-    
-    case 'OTHER':
-      return 'bg-purple-50 text-purple-600 dark:bg-purple-500/10 dark:text-purple-400'
-
-    default:
-      return 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'
-  }
-}
-
-const resetFilters = () => {
+const resetSearch = () => {
   search.value = ''
-  selectedTag.value = ''
-  sortBy.value = 'newest'
 }
 
-const editWork = (work: Work) => {
-  emit('edit', work)
-}
-
-const viewWork = (work: Work) => {
-  emit('view', work)
-}
-
-const deleteWork = (work: Work) => {
-  emit('delete', work)
-}
+/*
+|--------------------------------------------------------------------------
+| Refresh
+|--------------------------------------------------------------------------
+*/
 
 watch(
   () => props.refreshKey,
   () => {
-    fetchWorks()
+    fetchStackTypes()
   }
 )
 
-onMounted(fetchWorks)
+/*
+|--------------------------------------------------------------------------
+| Initial Load
+|--------------------------------------------------------------------------
+*/
+
+onMounted(() => {
+  fetchStackTypes()
+})
 </script>

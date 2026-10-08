@@ -8,14 +8,14 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('tag', function (Blueprint $table) {
-            $table->id('id_tag');
+        Schema::create('stack_types', function (Blueprint $table) {
+            $table->id('id_stack_type');
             $table->string('name');
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('tag');
+        Schema::dropIfExists('stack_types');
     }
 };

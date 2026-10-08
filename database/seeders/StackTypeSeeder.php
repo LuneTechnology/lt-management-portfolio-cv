@@ -3,13 +3,13 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Tag;
+use App\Models\StackType;
 
-class TagSeeder extends Seeder
+class StackTypeSeeder extends Seeder
 {
     public function run(): void
     {
-        $tags = [
+        $stackTypes = [
             ['name' => 'Programming Language'],
             ['name' => 'Frontend'],
             ['name' => 'Backend'],
@@ -21,8 +21,8 @@ class TagSeeder extends Seeder
             ['name' => 'XR / Immersive'],
         ];
 
-        foreach ($tags as $tag) {
-            Tag::firstOrCreate($tag);
+        foreach ($stackTypes as $stackType) {
+            StackType::firstOrCreate($stackType);
         }
     }
 }

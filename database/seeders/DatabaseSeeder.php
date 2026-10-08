@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             ExperienceSeeder::class,
             AchievementSeeder::class,
 
-            TagSeeder::class,
+            StackTypeSeeder::class,
             StackSeeder::class,
 
             TaskSeeder::class,

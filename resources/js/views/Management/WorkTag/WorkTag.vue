@@ -1,27 +1,23 @@
 <template>
+
   <AdminLayout>
+
     <PageBreadcrumb :pageTitle="currentPageTitle" />
 
     <div class="space-y-5 sm:space-y-6">
 
-      <!-- ===================================================== -->
-      <!-- SUMMARY -->
-      <!-- ===================================================== -->
-
+      <!-- Summary -->
       <ManagementSummaryCard
-        title="Total Stack"
-        :value="totalStacks"
+        title="Total Work Tag"
+        :value="totalWorkTags"
         :icon="DocsIcon"
-        quote="Every stack supports your experience."
+        quote="Every work background tells part of your journey."
         :change="1"
         color="blue"
       />
 
 
-      <!-- ===================================================== -->
-      <!-- STACK MANAGEMENT -->
-      <!-- ===================================================== -->
-
+      <!-- Work Tag Table -->
       <div
         class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
       >
@@ -30,11 +26,11 @@
         <div
           class="border-b border-gray-200 px-6 py-5 dark:border-gray-800"
         >
+
           <div
             class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
           >
 
-            <!-- Title -->
             <div class="flex items-center gap-3">
 
               <div
@@ -50,13 +46,13 @@
                 <h3
                   class="text-lg font-semibold text-gray-800 dark:text-white/90"
                 >
-                  Stack List
+                  Work Tag List
                 </h3>
 
                 <p
                   class="text-sm text-gray-500 dark:text-gray-400"
                 >
-                  Manage technology stacks used in your experience.
+                  Manage tags used to categorize work backgrounds.
                 </p>
 
               </div>
@@ -72,17 +68,18 @@
               @click="openCreateModal"
             >
               <span class="text-lg leading-none">+</span>
-              Add Stack
+              Add Work Tag
             </button>
 
           </div>
+
         </div>
 
 
-        <!-- Stack Table -->
-        <StackTable
+        <!-- Table -->
+        <WorkTagTable
           :refresh-key="refreshKey"
-          @total-changed="totalStacks = $event"
+          @total-changed="totalWorkTags = $event"
           @edit="openEditModal"
           @view="openViewModal"
           @delete="openDeleteModal"
@@ -102,11 +99,10 @@
       <div
         v-if="showFormModal"
         class="fixed inset-0 z-[99999] flex items-center justify-center bg-black/50 px-4"
-        @click.self="closeFormModal"
       >
 
         <div
-          class="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-900"
+          class="w-full max-w-md rounded-2xl bg-white p-6 dark:bg-gray-900"
         >
 
           <!-- Header -->
@@ -115,12 +111,12 @@
             <h3
               class="text-lg font-semibold text-gray-800 dark:text-white/90"
             >
-              {{ editingStack ? 'Edit Stack' : 'Add Stack' }}
+              {{ editingWorkTag ? 'Edit Work Tag' : 'Add Work Tag' }}
             </h3>
 
             <button
               type="button"
-              class="text-gray-400 transition hover:text-gray-600 dark:hover:text-gray-200"
+              class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
               @click="closeFormModal"
             >
               ✕
@@ -130,66 +126,25 @@
 
 
           <!-- Form -->
-          <div class="mt-6 space-y-5">
+          <div class="mt-6">
 
-            <!-- Stack -->
-            <div>
+            <label
+              class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
+              Work Tag
+            </label>
 
-              <label
-                class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                Stack
-              </label>
+            <input
+              v-model="form.name"
+              type="text"
+              maxlength="50"
+              placeholder="Example: Company"
+              class="h-11 w-full rounded-lg border border-gray-200 bg-white px-4 text-sm text-gray-800 outline-none transition focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+            />
 
-              <input
-                v-model="form.nama"
-                type="text"
-                maxlength="255"
-                placeholder="Example: Laravel"
-                class="h-11 w-full rounded-lg border border-gray-200 bg-white px-4 text-sm text-gray-800 outline-none transition focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-              />
-
-            </div>
-
-
-            <!-- Stack Type -->
-            <div>
-
-              <label
-                class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                Stack Type
-              </label>
-
-              <select
-                v-model="form.id_stack_type"
-                class="h-11 w-full rounded-lg border border-gray-200 bg-white px-4 text-sm text-gray-800 outline-none transition focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-              >
-
-                <option
-                  value=""
-                  disabled
-                >
-                  Select Stack Type
-                </option>
-
-                <option
-                  v-for="stackType in stackTypes"
-                  :key="stackType.id_stack_type"
-                  :value="stackType.id_stack_type"
-                >
-                  {{ stackType.name }}
-                </option>
-
-              </select>
-
-            </div>
-
-
-            <!-- Error -->
             <p
               v-if="formError"
-              class="text-sm text-error-500"
+              class="mt-2 text-sm text-error-500"
             >
               {{ formError }}
             </p>
@@ -212,7 +167,7 @@
               type="button"
               :disabled="saving"
               class="rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white shadow-theme-xs transition hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-50"
-              @click="saveStack"
+              @click="saveWorkTag"
             >
               {{ saving ? 'Saving...' : 'Save' }}
             </button>
@@ -235,11 +190,10 @@
       <div
         v-if="showViewModal"
         class="fixed inset-0 z-[99999] flex items-center justify-center bg-black/50 px-4"
-        @click.self="showViewModal = false"
       >
 
         <div
-          class="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-900"
+          class="w-full max-w-md rounded-2xl bg-white p-6 dark:bg-gray-900"
         >
 
           <!-- Header -->
@@ -248,12 +202,12 @@
             <h3
               class="text-lg font-semibold text-gray-800 dark:text-white/90"
             >
-              Stack Detail
+              Work Tag Detail
             </h3>
 
             <button
               type="button"
-              class="text-gray-400 transition hover:text-gray-600 dark:hover:text-gray-200"
+              class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
               @click="showViewModal = false"
             >
               ✕
@@ -263,45 +217,17 @@
 
 
           <!-- Detail -->
-          <div
-            v-if="viewingStack"
-            class="mt-6 space-y-5"
-          >
+          <div class="mt-6">
 
-            <!-- Stack -->
-            <div>
+            <p class="text-xs font-medium uppercase text-gray-400">
+              Work Tag
+            </p>
 
-              <p
-                class="text-xs font-medium uppercase text-gray-400"
-              >
-                Stack
-              </p>
-
-              <p
-                class="mt-1 text-base font-semibold text-gray-800 dark:text-white/90"
-              >
-                {{ viewingStack.nama || '-' }}
-              </p>
-
-            </div>
-
-
-            <!-- Stack Type -->
-            <div>
-
-              <p
-                class="text-xs font-medium uppercase text-gray-400"
-              >
-                Stack Type
-              </p>
-
-              <p
-                class="mt-1 text-base font-semibold text-gray-800 dark:text-white/90"
-              >
-                {{ viewingStack.stackType?.name || viewingStack.stack_type?.name || '-' }}
-              </p>
-
-            </div>
+            <p
+              class="mt-1 text-base font-semibold text-gray-800 dark:text-white/90"
+            >
+              {{ viewingWorkTag?.name || '-' }}
+            </p>
 
           </div>
 
@@ -335,11 +261,10 @@
       <div
         v-if="showDeleteModal"
         class="fixed inset-0 z-[99999] flex items-center justify-center bg-black/50 px-4"
-        @click.self="showDeleteModal = false"
       >
 
         <div
-          class="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-900"
+          class="w-full max-w-md rounded-2xl bg-white p-6 dark:bg-gray-900"
         >
 
           <!-- Header -->
@@ -348,12 +273,12 @@
             <h3
               class="text-lg font-semibold text-gray-800 dark:text-white/90"
             >
-              Delete Stack
+              Delete Work Tag
             </h3>
 
             <button
               type="button"
-              class="text-gray-400 transition hover:text-gray-600 dark:hover:text-gray-200"
+              class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
               @click="showDeleteModal = false"
             >
               ✕
@@ -365,22 +290,14 @@
           <!-- Message -->
           <div class="mt-5">
 
-            <p
-              class="text-sm text-gray-600 dark:text-gray-400"
-            >
-              Are you sure you want to delete this Stack?
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              Are you sure you want to delete this Work Tag?
             </p>
 
             <p
               class="mt-2 font-semibold text-gray-800 dark:text-white/90"
             >
-              {{ deletingStack?.nama }}
-            </p>
-
-            <p
-              class="mt-1 text-sm text-gray-500 dark:text-gray-400"
-            >
-              Stack yang masih digunakan oleh Experience tidak dapat dihapus.
+              {{ deletingWorkTag?.name }}
             </p>
 
             <p
@@ -408,7 +325,7 @@
               type="button"
               :disabled="deleting"
               class="rounded-lg bg-error-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-error-600 disabled:cursor-not-allowed disabled:opacity-50"
-              @click="deleteStack"
+              @click="deleteWorkTag"
             >
               {{ deleting ? 'Deleting...' : 'Delete' }}
             </button>
@@ -422,18 +339,19 @@
     </Teleport>
 
   </AdminLayout>
+
 </template>
 
 
 <script setup lang="ts">
 
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 
 import AdminLayout from '@/components/layout/AdminLayout.vue'
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 import ManagementSummaryCard from '@/components/management/ManagementSummaryCard.vue'
 
-import StackTable from '@/components/tables/management/StackTable.vue'
+import WorkTagTable from '@/components/tables/management/WorkTagTable.vue'
 
 import { DocsIcon } from '@/icons'
 
@@ -457,9 +375,9 @@ const { isSuperAdmin } = useAuth()
 |--------------------------------------------------------------------------
 */
 
-const currentPageTitle = ref('Stack')
+const currentPageTitle = ref('Work Tag')
 
-const totalStacks = ref(0)
+const totalWorkTags = ref(0)
 
 const refreshKey = ref(0)
 
@@ -483,20 +401,11 @@ const showDeleteModal = ref(false)
 |--------------------------------------------------------------------------
 */
 
-const editingStack = ref<any>(null)
+const editingWorkTag = ref<any>(null)
 
-const viewingStack = ref<any>(null)
+const viewingWorkTag = ref<any>(null)
 
-const deletingStack = ref<any>(null)
-
-
-/*
-|--------------------------------------------------------------------------
-| Stack Types
-|--------------------------------------------------------------------------
-*/
-
-const stackTypes = ref<any[]>([])
+const deletingWorkTag = ref<any>(null)
 
 
 /*
@@ -506,8 +415,7 @@ const stackTypes = ref<any[]>([])
 */
 
 const form = ref({
-  nama: '',
-  id_stack_type: '' as number | '',
+  name: '',
 })
 
 const saving = ref(false)
@@ -528,63 +436,21 @@ const deleteError = ref('')
 
 /*
 |--------------------------------------------------------------------------
-| Load Stack Types
-|--------------------------------------------------------------------------
-*/
-
-const loadStackTypes = async () => {
-
-  try {
-
-    const response = await axios.get(
-      '/api/stack-types'
-    )
-
-    const data =
-      response.data.data ??
-      response.data
-
-    stackTypes.value = Array.isArray(data)
-      ? data
-      : []
-
-  } catch (error) {
-
-    console.error(
-      'Failed to load stack types:',
-      error
-    )
-
-    stackTypes.value = []
-
-  }
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
 | Create
 |--------------------------------------------------------------------------
 */
 
 const openCreateModal = () => {
 
-  if (!isSuperAdmin()) {
-    return
-  }
-
-  editingStack.value = null
+  editingWorkTag.value = null
 
   form.value = {
-    nama: '',
-    id_stack_type: '',
+    name: '',
   }
 
   formError.value = ''
 
   showFormModal.value = true
-
 }
 
 
@@ -594,23 +460,17 @@ const openCreateModal = () => {
 |--------------------------------------------------------------------------
 */
 
-const openEditModal = (stack: any) => {
+const openEditModal = (workTag: any) => {
 
-  if (!isSuperAdmin()) {
-    return
-  }
-
-  editingStack.value = stack
+  editingWorkTag.value = workTag
 
   form.value = {
-    nama: stack.nama,
-    id_stack_type: stack.id_stack_type,
+    name: workTag.name,
   }
 
   formError.value = ''
 
   showFormModal.value = true
-
 }
 
 
@@ -620,46 +480,11 @@ const openEditModal = (stack: any) => {
 |--------------------------------------------------------------------------
 */
 
-const openViewModal = async (stack: any) => {
-  try {
-    const response = await axios.get(
-      `/api/stacks/${stack.id_stack}`
-    )
+const openViewModal = (workTag: any) => {
 
-    const data = response.data.data ?? response.data
+  viewingWorkTag.value = workTag
 
-    viewingStack.value = {
-      ...data,
-
-      // Normalisasi relasi Stack Type
-      stackType:
-        data.stackType ??
-        data.stack_type ??
-        stack.stackType ??
-        stack.stack_type ??
-        null,
-    }
-
-    showViewModal.value = true
-
-  } catch (error) {
-    console.error(
-      'Failed to load stack detail:',
-      error
-    )
-
-    // Tetap tampilkan data dari tabel jika request gagal
-    viewingStack.value = {
-      ...stack,
-
-      stackType:
-        stack.stackType ??
-        stack.stack_type ??
-        null,
-    }
-
-    showViewModal.value = true
-  }
+  showViewModal.value = true
 }
 
 
@@ -669,18 +494,13 @@ const openViewModal = async (stack: any) => {
 |--------------------------------------------------------------------------
 */
 
-const openDeleteModal = (stack: any) => {
+const openDeleteModal = (workTag: any) => {
 
-  if (!isSuperAdmin()) {
-    return
-  }
-
-  deletingStack.value = stack
+  deletingWorkTag.value = workTag
 
   deleteError.value = ''
 
   showDeleteModal.value = true
-
 }
 
 
@@ -694,56 +514,30 @@ const closeFormModal = () => {
 
   showFormModal.value = false
 
-  editingStack.value = null
+  editingWorkTag.value = null
 
   form.value = {
-    nama: '',
-    id_stack_type: '',
+    name: '',
   }
 
   formError.value = ''
-
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| Save Stack
+| Save
 |--------------------------------------------------------------------------
 */
 
-const saveStack = async () => {
+const saveWorkTag = async () => {
 
-  if (!isSuperAdmin()) {
-    return
-  }
+  if (!form.value.name.trim()) {
 
-
-  /*
-  |--------------------------------------------------------------------------
-  | Validation
-  |--------------------------------------------------------------------------
-  */
-
-  if (!form.value.nama.trim()) {
-
-    formError.value =
-      'Stack is required.'
+    formError.value = 'Work Tag is required.'
 
     return
-
   }
-
-
-  if (!form.value.id_stack_type) {
-
-    formError.value =
-      'Stack Type is required.'
-
-    return
-
-  }
-
 
   try {
 
@@ -751,58 +545,21 @@ const saveStack = async () => {
 
     formError.value = ''
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Payload
-    |--------------------------------------------------------------------------
-    */
-
-    const payload = {
-      nama: form.value.nama.trim(),
-      id_stack_type: Number(
-        form.value.id_stack_type
-      ),
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Update
-    |--------------------------------------------------------------------------
-    */
-
-    if (editingStack.value) {
+    if (editingWorkTag.value) {
 
       await axios.put(
-        `/api/stacks/${editingStack.value.id_stack}`,
-        payload
+        `/api/work-tags/${editingWorkTag.value.id_work_tag}`,
+        form.value
       )
 
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Create
-    |--------------------------------------------------------------------------
-    */
-
-    else {
+    } else {
 
       await axios.post(
-        '/api/stacks',
-        payload
+        '/api/work-tags',
+        form.value
       )
 
     }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Close & Refresh
-    |--------------------------------------------------------------------------
-    */
 
     closeFormModal()
 
@@ -811,38 +568,33 @@ const saveStack = async () => {
   } catch (error: any) {
 
     console.error(
-      'Failed to save stack:',
+      'Failed to save work tag:',
       error
     )
 
     formError.value =
       error.response?.data?.message ||
-      'Failed to save Stack.'
+      'Failed to save Work Tag.'
 
   } finally {
 
     saving.value = false
 
   }
-
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| Delete Stack
+| Delete
 |--------------------------------------------------------------------------
 */
 
-const deleteStack = async () => {
+const deleteWorkTag = async () => {
 
-  if (
-    !deletingStack.value ||
-    !isSuperAdmin()
-  ) {
+  if (!deletingWorkTag.value) {
     return
   }
-
 
   try {
 
@@ -850,61 +602,32 @@ const deleteStack = async () => {
 
     deleteError.value = ''
 
-
     await axios.delete(
-      `/api/stacks/${deletingStack.value.id_stack}`
+      `/api/work-tags/${deletingWorkTag.value.id_work_tag}`
     )
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Close Delete Modal
-    |--------------------------------------------------------------------------
-    */
 
     showDeleteModal.value = false
 
-    deletingStack.value = null
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Refresh Table
-    |--------------------------------------------------------------------------
-    */
+    deletingWorkTag.value = null
 
     refreshKey.value++
 
   } catch (error: any) {
 
     console.error(
-      'Failed to delete stack:',
+      'Failed to delete work tag:',
       error
     )
 
     deleteError.value =
       error.response?.data?.message ||
-      'Failed to delete Stack.'
+      'Failed to delete Work Tag.'
 
   } finally {
 
     deleting.value = false
 
   }
-
 }
-
-
-/*
-|--------------------------------------------------------------------------
-| Initial Load
-|--------------------------------------------------------------------------
-*/
-
-onMounted(() => {
-
-  loadStackTypes()
-
-})
 
 </script>

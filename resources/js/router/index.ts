@@ -176,12 +176,12 @@ const router = createRouter({
       },
     },
     {
-      path: '/tags',
-      name: 'Tags',
-      component: () => import('../views/Management/Tag/Tag.vue'),
+      path: '/stack-types',
+      name: 'StackTypes',
+      component: () => import('../views/Management/StackType/StackType.vue'),
       meta: {
         requiresAuth: true,
-        title: 'Tag Management',
+        title: 'Stack Type Management',
       },
     },
     {
@@ -248,14 +248,25 @@ const router = createRouter({
       },
     },
     {
-  path: '/achievements',
-  name: 'Achievement',
-  component: () => import('../views/Management/Achievement/Achievement.vue'),
-  meta: {
-    title: 'Achievement Management',
-    requiresAuth: true,
-  },
-},
+      path: '/achievements',
+      name: 'Achievement',
+      component: () => import('../views/Management/Achievement/Achievement.vue'),
+      meta: 
+      {
+        title: 'Achievement Management',
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/work-tags',
+      name: 'WorkTag',
+      component: () => import('../views/Management/WorkTag/WorkTag.vue'),
+      meta: 
+      {
+        title: 'Work Tag Management',
+        requiresAuth: true,
+      },
+    },
   ],
 })
 

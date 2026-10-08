@@ -15,15 +15,15 @@ class Stack extends Model
 
     protected $fillable = [
         'nama',
-        'id_tag',
+        'id_stack_type',
     ];
 
-    public function tag(): BelongsTo
+    public function stackType(): BelongsTo
     {
         return $this->belongsTo(
-            Tag::class,
-            'id_tag',
-            'id_tag'
+            StackType::class,
+            'id_stack_type',
+            'id_stack_type'
         );
     }
 

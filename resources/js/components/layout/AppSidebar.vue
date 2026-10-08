@@ -306,8 +306,8 @@ const menuGroups = computed(() => {
       pro: false,
     },
     {
-      name: "Tag",
-      path: "/tags",
+      name: "Stack Type",
+      path: "/stack-types",
       pro: false,
     },
     {

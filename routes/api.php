@@ -14,8 +14,9 @@ use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\StackController;
 use App\Http\Controllers\ExperienceStackController;
-use App\Http\Controllers\TagController;
+use App\Http\Controllers\StackTypeController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\WorkTagController;
 use Illuminate\Support\Facades\Route;
 
 Route::apiResource('roles', RoleController::class);
@@ -31,9 +32,9 @@ Route::apiResource('experiences', ExperienceController::class);
 Route::apiResource('experience-stacks', ExperienceStackController::class);
 Route::apiResource('tasks', TaskController::class);
 Route::apiResource('stacks', StackController::class);
-Route::apiResource('tags', TagController::class);
+Route::apiResource('stack-types', StackTypeController::class);
 Route::apiResource('achievements', AchievementController::class);
-
+Route::apiResource('work-tags', WorkTagController::class);
 
 // Authentication routes
 Route::post('/login', [AuthController::class, 'login']);

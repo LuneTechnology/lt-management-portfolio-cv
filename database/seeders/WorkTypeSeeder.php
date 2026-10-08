@@ -10,10 +10,11 @@ class WorkTypeSeeder extends Seeder
     public function run(): void
     {
         $workTypes = [
-            ['name' => 'Remote'],
-            ['name' => 'Onsite'],
-            ['name' => 'Hybrid'],
+            ['name' => 'Freelance'],
+            ['name' => 'Internship'],
             ['name' => 'Contract'],
+            ['name' => 'Part-time'],
+            ['name' => 'Full-time'],
         ];
 
         foreach ($workTypes as $type) {

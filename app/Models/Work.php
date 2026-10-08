@@ -18,6 +18,9 @@ class Work extends Model
         'id_work_tag',
     ];
 
+    /**
+     * Relasi Work ke WorkTag
+     */
     public function workTag(): BelongsTo
     {
         return $this->belongsTo(
@@ -27,6 +30,9 @@ class Work extends Model
         );
     }
 
+    /**
+     * Relasi Work ke Education
+     */
     public function educations(): HasMany
     {
         return $this->hasMany(
@@ -36,6 +42,9 @@ class Work extends Model
         );
     }
 
+    /**
+     * Relasi Work ke Experience
+     */
     public function experiences(): HasMany
     {
         return $this->hasMany(

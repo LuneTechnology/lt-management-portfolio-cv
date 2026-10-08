@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Tag extends Model
+class StackType extends Model
 {
-    protected $table = 'tag';
-    protected $primaryKey = 'id_tag';
+    protected $table = 'stack_types';
+    protected $primaryKey = 'id_stack_type';
 
     public $timestamps = false;
 
@@ -20,8 +20,8 @@ class Tag extends Model
     {
         return $this->hasMany(
             Stack::class,
-            'id_tag',
-            'id_tag'
+            'id_stack_type',
+            'id_stack_type'
         );
     }
 }
