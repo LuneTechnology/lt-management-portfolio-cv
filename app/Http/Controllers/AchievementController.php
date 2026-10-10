@@ -9,39 +9,39 @@ use Illuminate\Support\Facades\Storage;
 class AchievementController extends Controller
 {
     /**
-     * Display a listing of the achievements (search, filter, sort, pagination).
+     * Display achievements with search, filters, sorting, pagination, and stats.
      */
     public function index(Request $request)
     {
         $achievements = Achievement::with('category')
-            ->when($request->search, fn ($q, $s) => $q->where('name', 'like', "%$s%"))
-            ->when($request->category, fn ($q, $c) => $q->where('id_category', $c))
-            ->when($request->type, fn ($q, $t) => $q->where('type', $t))
-            ->orderBy('date', $request->sort === 'oldest' ? 'asc' : 'desc')
-            ->paginate($request->get('per_page', 5));
+            ->when($request->filled('search'), fn ($q) => $q->where('name', 'like', '%' . $request->search . '%'))
+            ->when($request->filled('category'), fn ($q) => $q->where('id_category', $request->category))
+            ->when($request->filled('type'), fn ($q) => $q->where('type', $request->type))
+            ->orderBy('date', $request->input('sort') === 'oldest' ? 'asc' : 'desc')
+            ->paginate((int) $request->input('per_page', 5));
 
         return response()->json([
             'success' => true,
-            'data'    => $achievements->items(),
-            'meta'    => [
+            'data' => $achievements->items(),
+            'meta' => [
                 'current_page' => $achievements->currentPage(),
-                'last_page'    => $achievements->lastPage(),
-                'per_page'     => $achievements->perPage(),
-                'total'        => $achievements->total(),
-                'from'         => $achievements->firstItem(),
-                'to'           => $achievements->lastItem(),
+                'last_page' => $achievements->lastPage(),
+                'per_page' => $achievements->perPage(),
+                'total' => $achievements->total(),
+                'from' => $achievements->firstItem(),
+                'to' => $achievements->lastItem(),
             ],
-            'stats'   => [
-                'total'          => Achievement::count(),
+            'stats' => [
+                'total' => Achievement::count(),
                 'new_this_month' => Achievement::whereMonth('created_at', now()->month)
-                                        ->whereYear('created_at', now()->year)
-                                        ->count(),
+                    ->whereYear('created_at', now()->year)
+                    ->count(),
             ],
-        ], 200);
+        ]);
     }
 
     /**
-     * Display the specified achievement.
+     * Display a single achievement.
      */
     public function show($id)
     {
@@ -49,25 +49,27 @@ class AchievementController extends Controller
 
         return response()->json([
             'success' => true,
-            'data'    => $achievement
-        ], 200);
+            'data' => $achievement,
+        ]);
     }
 
     /**
-     * Store a newly created achievement in storage.
+     * Store a new achievement.
      */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'        => 'required|string|max:255',
-            'place'       => 'required|string|max:255',
-            'date'        => 'required|date',
-            'id_project'  => 'nullable|exists:projects,id_project',
-            'id_category' => 'required|exists:categories,id_category',
+            'name' => 'required|string|max:255',
+            'place' => 'required|string|max:255',
+            'date' => 'required|date',
+            // This project uses the singular table name `project`.
+            'id_project' => 'nullable|exists:project,id_project',
+            // This project uses the singular table name `category`.
+            'id_category' => 'nullable|exists:category,id_category',
             'description' => 'nullable|string|max:255',
-            'type'        => 'required|in:Award,Training',
-            'status'      => 'required|in:Verified,Completed',
-            'logo'        => 'nullable|image|max:2048',
+            'type' => 'required|in:Award,Training',
+            'status' => 'required|in:Verified,Completed',
+            'logo' => 'nullable|image|max:2048',
         ]);
 
         if ($request->hasFile('logo')) {
@@ -81,33 +83,36 @@ class AchievementController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Achievement created successfully',
-            'data'    => $achievement->load('category')
+            'data' => $achievement->load('category'),
         ], 201);
     }
 
     /**
-     * Update the specified achievement in storage.
+     * Update an existing achievement.
      */
     public function update(Request $request, $id)
     {
         $achievement = Achievement::findOrFail($id);
 
         $validated = $request->validate([
-            'name'        => 'required|string|max:255',
-            'place'       => 'required|string|max:255',
-            'date'        => 'required|date',
-            'id_project'  => 'nullable|exists:projects,id_project',
-            'id_category' => 'required|exists:categories,id_category',
+            'name' => 'required|string|max:255',
+            'place' => 'required|string|max:255',
+            'date' => 'required|date',
+            // This project uses the singular table name `project`.
+            'id_project' => 'nullable|exists:project,id_project',
+            // This project uses the singular table name `category`.
+            'id_category' => 'nullable|exists:category,id_category',
             'description' => 'nullable|string|max:255',
-            'type'        => 'required|in:Award,Training',
-            'status'      => 'required|in:Verified,Completed',
-            'logo'        => 'nullable|image|max:2048',
+            'type' => 'required|in:Award,Training',
+            'status' => 'required|in:Verified,Completed',
+            'logo' => 'nullable|image|max:2048',
         ]);
 
         if ($request->hasFile('logo')) {
             if ($achievement->logo) {
                 Storage::disk('public')->delete($achievement->logo);
             }
+
             $validated['logo'] = $request->file('logo')->store('achievements', 'public');
         }
 
@@ -116,12 +121,12 @@ class AchievementController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Achievement updated successfully',
-            'data'    => $achievement->load('category')
-        ], 200);
+            'data' => $achievement->load('category'),
+        ]);
     }
 
     /**
-     * Remove the specified achievement from storage.
+     * Delete an achievement.
      */
     public function destroy($id)
     {
@@ -135,7 +140,7 @@ class AchievementController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Achievement deleted successfully'
-        ], 200);
+            'message' => 'Achievement deleted successfully',
+        ]);
     }
 }
