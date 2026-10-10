@@ -215,173 +215,84 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { useRoute } from "vue-router";
 
 import {
   GridIcon,
-  CalenderIcon,
   UserCircleIcon,
-  ChatIcon,
-  MailIcon,
   DocsIcon,
   PieChartIcon,
-  ChevronDownIcon,
-  HorizontalDots,
-  PageIcon,
-  TableIcon,
+  FolderIcon,
   ListIcon,
-  PlugInIcon,
+  BoxCubeIcon,
+  TaskIcon,
 } from "../../icons";
-import SidebarWidget from "./SidebarWidget.vue";
-import BoxCubeIcon from "@/icons/BoxCubeIcon.vue";
 import { useSidebar } from "@/composables/useSidebar";
 import { useAuth } from "@/composables/useAuth";
 
 const route = useRoute();
-
 const { isExpanded, isMobileOpen, isHovered, openSubmenu } = useSidebar();
-
 const { user } = useAuth();
 
+/**
+ * Sidebar final LT Management Portfolio CV.
+ * Contributor, Task, Stack assignment, Links, and Gallery are managed
+ * through Project/Contributor flows, not as separate navigation entries.
+ */
 const menuGroups = computed(() => {
-  const roleId = user.value?.id_role;
+  const roleId = Number(user.value?.id_role);
+  const isAdmin = roleId === 1 || roleId === 2;
+  const isSuperAdmin = roleId === 2;
 
-  const managementItems = [
+  if (!isAdmin) return [];
+
+  const groups = [
     {
-      name: "Education",
-      path: "/educations",
-      pro: false,
+      title: "General",
+      items: [
+        { icon: GridIcon, name: "Dashboard", path: "/" },
+      ],
     },
     {
-      name: "Experience",
-      path: "/experiences",
-      pro: false,
+      title: "Portfolio Management",
+      items: [
+        { icon: FolderIcon, name: "Projects", path: "/projects" },
+        { icon: DocsIcon, name: "Education", path: "/educations" },
+        { icon: PieChartIcon, name: "Achievements", path: "/achievements" },
+      ],
     },
     {
-      name: "Project",
-      path: "/projects",
-      pro: false,
-    },
-    {
-      name: "Achievement",
-      path: "/achievements",
-      pro: false,
+      title: "Master Data",
+      items: [
+        { icon: BoxCubeIcon, name: "Works", path: "/works" },
+        { icon: ListIcon, name: "Categories", path: "/category" },
+        { icon: TaskIcon, name: "Position Types", path: "/position-types" },
+        { icon: TaskIcon, name: "Work Types", path: "/work-types" },
+        { icon: BoxCubeIcon, name: "Stacks", path: "/stack" },
+        { icon: ListIcon, name: "Stack Types", path: "/stack-types" },
+        { icon: ListIcon, name: "Work Tags", path: "/work-tags" },
+      ],
     },
   ];
 
-  // Super Admin dapat mengelola User
-  if (roleId === 2) {
-    managementItems.unshift({
-      name: "User",
-      path: "/users",
-      pro: false,
+  if (isSuperAdmin) {
+    groups.push({
+      title: "System",
+      items: [
+        { icon: UserCircleIcon, name: "Users", path: "/users" },
+      ],
     });
   }
 
-  const masterDataItems = [
-    {
-      name: "Work",
-      path: "/works",
-      pro: false,
-    },
-    {
-      name: "Work Tag",
-      path: "/work-tags",
-      pro: false,
-    },
-    {
-      name: "Position Type",
-      path: "/position-types",
-      pro: false,
-    },
-    {
-      name: "Work Type",
-      path: "/work-types",
-      pro: false,
-    },
-    {
-      name: "Category",
-      path: "/category",
-      pro: false,
-    },
-    {
-      name: "Stack Type",
-      path: "/stack-types",
-      pro: false,
-    },
-    {
-      name: "Stack",
-      path: "/stack",
-      pro: false,
-    },
-  ];
+  groups.push({
+    title: "Account",
+    items: [
+      { icon: UserCircleIcon, name: "Profile", path: "/profile" },
+    ],
+  });
 
-  if (roleId === 1 || roleId === 2) {
-    return [
-      {
-        title: "",
-        items: [
-          {
-            icon: GridIcon,
-            name: "Dashboard",
-            path: "/",
-          },
-        ],
-      },
-
-      {
-        title: "",
-        items: [
-          {
-            icon: TableIcon,
-            name: "Management",
-            subItems: managementItems,
-          },
-        ],
-      },
-
-      {
-        title: "",
-        items: [
-          {
-            icon: TableIcon,
-            name: "Master Data",
-            subItems: masterDataItems,
-          },
-        ],
-      },
-
-      {
-        title: "Account",
-        items: [
-          {
-            icon: UserCircleIcon,
-            name: "Profile",
-            path: "/profile",
-          },
-        ],
-      },
-
-      {
-        title: "Menu",
-        items: [
-          {
-            icon: CalenderIcon,
-            name: "Calendar",
-            path: "/calendar",
-          },
-          {
-            icon: GridIcon,
-            name: "Settings",
-            path: "/settings",
-          },
-        ],
-      },
-    ];
-  }
-
-  return [];
+  return groups;
 });
 
 const isActive = (path) => route.path === path;

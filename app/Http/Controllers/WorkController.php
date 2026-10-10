@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Work;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\QueryException;
 
 class WorkController extends Controller
@@ -37,7 +38,12 @@ class WorkController extends Controller
             'name' => 'required|string|max:50',
             'place' => 'required|string|max:50',
             'id_work_tag' => 'required|integer|exists:work_tags,id_work_tag',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('works', 'public');
+        }
 
         $work = Work::create($validated);
 
@@ -64,7 +70,13 @@ class WorkController extends Controller
             'name' => 'required|string|max:50',
             'place' => 'required|string|max:50',
             'id_work_tag' => 'required|integer|exists:work_tags,id_work_tag',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
+
+        if ($request->hasFile('image')) {
+            if ($work->image) Storage::disk('public')->delete($work->image);
+            $validated['image'] = $request->file('image')->store('works', 'public');
+        }
 
         $work->update($validated);
 
@@ -79,8 +91,10 @@ class WorkController extends Controller
 
         $work = Work::findOrFail($id);
 
+        $imagePath = $work->image;
         try {
             $work->delete();
+            if ($imagePath) Storage::disk('public')->delete($imagePath);
 
             return response()->json([
                 'message' => 'Work deleted successfully.',

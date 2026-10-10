@@ -9,20 +9,12 @@ class Task extends Model
 {
     protected $table = 'task';
     protected $primaryKey = 'id_task';
-
     public $timestamps = false;
 
-    protected $fillable = [
-        'id_experience',
-        'desc',
-    ];
+    protected $fillable = ['id_experience', 'desc'];
 
     public function experience(): BelongsTo
     {
-        return $this->belongsTo(
-            Experience::class,
-            'id_experience',
-            'id_experience'
-        );
+        return $this->belongsTo(Experience::class, 'id_experience', 'id_experience');
     }
 }

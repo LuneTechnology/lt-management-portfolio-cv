@@ -9,7 +9,7 @@
       </div>
 
       <!-- Modal -->
-      <Modal v-if="isOpen" @close="closeModal = false">
+      <Modal v-if="isOpen" @close="closeModal">
         <template #body>
           <div
             class="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11"

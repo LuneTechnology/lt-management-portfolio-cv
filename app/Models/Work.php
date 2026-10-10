@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -16,7 +17,15 @@ class Work extends Model
         'name',
         'place',
         'id_work_tag',
+        'image',
     ];
+
+    protected $appends = ['image_url'];
+
+    protected function imageUrl(): Attribute
+    {
+        return Attribute::get(fn () => $this->image ? '/storage/' . ltrim($this->image, '/') : null);
+    }
 
     /**
      * Relasi Work ke WorkTag

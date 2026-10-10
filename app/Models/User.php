@@ -15,8 +15,20 @@ class User extends Authenticatable
         'photo',
         'contact',
         'aboutme',
+        'social_links',
         'id_role',
     ];
+
+    protected $casts = [
+        'social_links' => 'array',
+    ];
+
+    protected $appends = ['photo_url'];
+
+    protected function photoUrl(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::get(fn () => $this->photo ? '/storage/' . ltrim($this->photo, '/') : null);
+    }
 
     protected $hidden = [
         'password',

@@ -253,7 +253,7 @@
         @click.self="closeModal"
       >
         <div
-          class="max-h-[90vh] w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-xl dark:bg-gray-900"
+          class="max-h-[90vh] w-full max-w-2xl overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl dark:border-gray-800 dark:bg-gray-900"
         >
           <!-- Header -->
           <div
@@ -511,7 +511,7 @@
         @click.self="closeDeleteModal"
       >
         <div
-          class="w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-xl dark:bg-gray-900"
+          class="w-full max-w-md overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl dark:border-gray-800 dark:bg-gray-900"
         >
           <div class="px-6 pt-6">
             <!-- Icon -->

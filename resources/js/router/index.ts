@@ -9,21 +9,22 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'Ecommerce',
-      component: () => import('../views/Ecommerce.vue'),
+      name: 'Dashboard',
+      component: () => import('../views/Dashboard.vue'),
       meta: {
         requiresAuth: true,
-        title: 'eCommerce Dashboard',
+        title: 'Dashboard',
       },
     },
     {
-      path: '/products',
-      name: 'Products',
-      component: () => import('../views/Products/Products.vue'),
+      path: '/projects',
+      name: 'Projects',
+      component: () =>
+        import('../views/Management/Project/Project.vue'),
       meta: {
+        title: 'Project',
         requiresAuth: true,
-        title: 'Products',
-      }
+      },
     },
     {
       path: '/users',
@@ -194,7 +195,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/Works',
+      path: '/works',
       name: 'Work',
       component: () => import('../views/Management/Work/Work.vue'),
       meta: {
@@ -296,10 +297,10 @@ router.beforeEach(async (to, from) => {
   // Sudah login tapi halaman khusus Super Admin
   if (
     to.meta.superAdminOnly &&
-    user.value?.role?.name !== 'Super Admin'
+    Number(user.value?.id_role) !== 2
   ) {
     return {
-      name: 'Ecommerce',
+      name: 'Dashboard',
     }
   }
 
@@ -309,7 +310,7 @@ router.beforeEach(async (to, from) => {
     user.value
   ) {
     return {
-      name: 'Ecommerce',
+      name: 'Dashboard',
     }
   }
 })

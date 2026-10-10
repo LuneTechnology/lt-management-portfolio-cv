@@ -2,18 +2,19 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Link;
+use App\Models\Project;
+use Illuminate\Database\Seeder;
 
 class LinkSeeder extends Seeder
 {
     public function run(): void
     {
-        Link::create([
-            'name' => 'Github',
-            'link'=> 'https//:github.com',
-            'id_project' => '1',
-        ]);
+        $project = Project::where('name', 'LT Portfolio CV')->firstOrFail();
+
+        Link::updateOrCreate(
+            ['id_project' => $project->id_project, 'name' => 'GitHub'],
+            ['link' => 'https://github.com/']
+        );
     }
 }

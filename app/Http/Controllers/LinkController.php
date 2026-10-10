@@ -2,25 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Link;
+use Illuminate\Http\Request;
 
 class LinkController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Link::all());
+        $query = Link::query();
+
+        if ($request->filled('id_project')) {
+            $query->where('id_project', $request->integer('id_project'));
+        }
+
+        return response()->json(
+            $query->orderBy('sort_order')->orderBy('id_link')->get()
+        );
     }
 
-    // CREATE
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'      => 'nullable|string|max:50',
-            'link'   => 'nullable|string|max:50',
+            'id_project' => ['required', 'integer', 'exists:project,id_project'],
+            'name' => ['required', 'string', 'max:100'],
+            'link' => ['required', 'url', 'max:2048'],
+            'type' => ['required', 'in:live_demo,source_code,video,documentation,article,other'],
+            'sort_order' => ['sometimes', 'integer', 'min:0', 'max:100000'],
         ]);
 
         $link = Link::create($validated);
@@ -28,32 +35,30 @@ class LinkController extends Controller
         return response()->json($link, 201);
     }
 
-    // READ - satu link
     public function show(Link $link)
     {
         return response()->json($link);
     }
 
-    // UPDATE
     public function update(Request $request, Link $link)
     {
         $validated = $request->validate([
-            'name'      => 'nullable|string|max:50',
-            'link'   => 'nullable|string|max:50',
+            'id_project' => ['sometimes', 'required', 'integer', 'exists:project,id_project'],
+            'name' => ['sometimes', 'required', 'string', 'max:100'],
+            'link' => ['sometimes', 'required', 'url', 'max:2048'],
+            'type' => ['sometimes', 'required', 'in:live_demo,source_code,video,documentation,article,other'],
+            'sort_order' => ['sometimes', 'integer', 'min:0', 'max:100000'],
         ]);
 
         $link->update($validated);
 
-        return response()->json($link);
+        return response()->json($link->fresh());
     }
 
-    // DELETE
     public function destroy(Link $link)
     {
         $link->delete();
 
-        return response()->json([
-            'message' => 'Link berhasil dihapus'
-        ]);
+        return response()->json(['message' => 'Link project berhasil dihapus.']);
     }
 }

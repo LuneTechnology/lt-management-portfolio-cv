@@ -2,31 +2,27 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\Task;
 use App\Models\Experience;
+use App\Models\Task;
+use Illuminate\Database\Seeder;
 
 class TaskSeeder extends Seeder
 {
     public function run(): void
     {
-        $experiences = Experience::all();
+        $descriptions = [
+            'Develop application features',
+            'Integrate APIs and services',
+            'Test and document implementation',
+        ];
 
-        foreach ($experiences as $experience) {
-            Task::create([
-                'id_experience' => $experience->id_experience,
-                'desc' => 'Develop application',
-            ]);
-
-            Task::create([
-                'id_experience' => $experience->id_experience,
-                'desc' => 'Create documentation',
-            ]);
-
-            Task::create([
-                'id_experience' => $experience->id_experience,
-                'desc' => 'Testing application',
-            ]);
+        foreach (Experience::all() as $experience) {
+            foreach ($descriptions as $description) {
+                Task::firstOrCreate([
+                    'id_experience' => $experience->id_experience,
+                    'desc' => $description,
+                ]);
+            }
         }
     }
 }

@@ -37,17 +37,6 @@
             <!-- Title -->
             <div class="flex items-center gap-3">
 
-              <div
-                class="flex h-10 w-10 items-center
-                       justify-center rounded-xl
-                       bg-blue-50
-                       dark:bg-blue-500/10"
-              >
-                <DocsIcon
-                  class="h-5 w-5 text-blue-500"
-                />
-              </div>
-
               <div>
 
                 <h3
@@ -73,13 +62,7 @@
             <!-- Add Button -->
             <button
               type="button"
-              class="inline-flex items-center
-                     justify-center gap-2
-                     rounded-lg bg-brand-500
-                     px-4 py-2.5 text-sm
-                     font-medium text-white
-                     shadow-theme-xs
-                     transition hover:bg-brand-600"
+              class="inline-flex items-center justify-center rounded-lg bg-brand-500 px-4 py-3 text-sm font-medium text-white shadow-theme-xs transition hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-60"
               @click="addExperience"
             >
               <span class="text-lg leading-none">

@@ -104,6 +104,7 @@
               #
             </th>
 
+            <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Image</th>
             <th
               class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500"
             >
@@ -140,7 +141,7 @@
           <tr v-if="loading">
 
             <td
-              colspan="5"
+              colspan="6"
               class="px-6 py-12 text-center text-sm text-gray-500"
             >
               Loading works...
@@ -153,7 +154,7 @@
           <tr v-else-if="filteredWorks.length === 0">
 
             <td
-              colspan="5"
+              colspan="6"
               class="px-6 py-12 text-center text-sm text-gray-500"
             >
               No work found.
@@ -177,6 +178,14 @@
               {{ index + 1 }}
             </td>
 
+
+            <!-- Optional image -->
+            <td class="px-6 py-4">
+              <div class="flex h-11 w-11 items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800">
+                <img v-if="work.image_url" :src="work.image_url" :alt="work.name" class="h-full w-full object-cover" />
+                <span v-else class="text-[10px] text-gray-400">N/A</span>
+              </div>
+            </td>
 
             <!-- Work -->
             <td class="px-6 py-5">
@@ -329,6 +338,7 @@ interface Work {
   id_work: number
   name: string
   place: string
+  image_url?: string | null
   id_work_tag: number | null
   work_tag?: WorkTag | null
 }

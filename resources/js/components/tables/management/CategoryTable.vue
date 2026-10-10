@@ -1,312 +1,331 @@
-<template>
-  <div>
-
-    <!-- Filters -->
-    <div
-      class="flex flex-col gap-3 border-b border-gray-200 px-6 py-5 dark:border-gray-800 xl:flex-row xl:items-center xl:justify-between"
-    >
-
-      <!-- Search -->
-      <div class="relative w-full xl:max-w-md">
-        <span
-          class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-        >
-          🔍
-        </span>
-
-        <input
-          v-model="search"
-          type="text"
-          placeholder="Search category..."
-          class="h-11 w-full rounded-lg border border-gray-200 bg-white pl-11 pr-4 text-sm text-gray-800 outline-none transition focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-        />
-      </div>
-
-      <!-- Filters -->
-      <div class="flex flex-wrap gap-3">
-
-        <select
-          v-model="sortBy"
-          class="h-11 rounded-lg border border-gray-200 bg-white px-4 text-sm text-gray-700 outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
-        >
-          <option value="newest">Newest</option>
-          <option value="oldest">Oldest</option>
-          <option value="name">Name</option>
-        </select>
-
-        <button
-          type="button"
-          class="h-11 rounded-lg border border-gray-200 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/[0.03]"
-          @click="resetFilters"
-        >
-          ↻ Reset
-        </button>
-
-      </div>
-    </div>
-
-    <!-- Table -->
-    <div class="overflow-x-auto">
-
-       <table class="min-w-[1100px] w-full">
-
-        <thead>
-          <tr
-            class="border-b border-gray-200 bg-gray-50/70 dark:border-gray-800 dark:bg-white/[0.02]"
-          >
-            <!-- Fixed Width # -->
-            <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
-              #
-            </th>
-
-            <!-- Flexible Category Name -->
-            <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
-              Category Name
-            </th>
-
-            <!-- Fixed Width Actions -->
-            <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
-              Actions
-            </th>
-          </tr>
-        </thead>
-
-        <tbody>
-
-          <!-- Loading -->
-          <tr v-if="loading">
-            <td
-              colspan="8"
-              class="px-6 py-12 text-center text-sm text-gray-500"
-            >
-              Loading categories...
-            </td>
-          </tr>
-
-          <!-- Empty -->
-          <tr v-else-if="filteredCategories.length === 0">
-            <td
-              colspan="8"
-              class="px-6 py-12 text-center text-sm text-gray-500"
-            >
-              No categories found.
-            </td>
-          </tr>
-
-          <!-- Data -->
-          <tr
-            v-for="(category, index) in filteredCategories"
-            v-else
-            :key="category.id_category"
-            class="border-b border-gray-100 transition hover:bg-gray-50/70 dark:border-gray-800 dark:hover:bg-white/[0.02]"
-          >
-
-            <!-- Number (Presisi Jarak) -->
-            <td
-              class="w-6 px-6 py-5 text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
-              {{ index + 1 }}
-            </td>
-
-            <!-- Category Name -->
-            <td class="px-6 py-5">
-              <p
-                class="font-semibold text-gray-800 dark:text-white/90"
-              >
-                {{ category.name }}
-              </p>
-            </td>
-
-            <!-- Actions (Posisi Rata Kanan Presisi) -->
-            <td class="w-48 px-6 py-5">
-              <div class="flex justify-end gap-2">
-
-                <button
-                  type="button"
-                  title="Edit"
-                  class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-400"
-                  @click="editCategory(category)"
-                >
-                  ✎
-                </button>
-
-                <button
-                  type="button"
-                  title="View"
-                  class="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400"
-                  @click="viewCategory(category)"
-                >
-                  👁
-                </button>
-
-                <button
-                  type="button"
-                  title="Delete"
-                  class="flex h-9 w-9 items-center justify-center rounded-lg bg-red-50 text-red-600 transition hover:bg-red-100 dark:bg-red-500/10 dark:text-red-400"
-                  @click="deleteCategory(category.id_category)"
-                >
-                  🗑
-                </button>
-
-              </div>
-            </td>
-
-          </tr>
-
-        </tbody>
-
-      </table>
-    </div>
-
-    <!-- Footer -->
-    <div
-      class="flex flex-col gap-3 border-t border-gray-200 px-6 py-4 sm:flex-row sm:items-center sm:justify-between dark:border-gray-800"
-    >
-
-      <p class="text-sm text-gray-500 dark:text-gray-400">
-        Showing {{ filteredCategories.length }}
-        of {{ categories.length }} results
-      </p>
-
-      <div class="flex items-center gap-2">
-
-        <button
-          type="button"
-          disabled
-          class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-400 dark:border-gray-700"
-        >
-          ‹
-        </button>
-
-        <button
-          type="button"
-          class="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-500 text-sm font-medium text-white"
-        >
-          1
-        </button>
-
-        <button
-          type="button"
-          disabled
-          class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-400 dark:border-gray-700"
-        >
-          ›
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-</template>
-
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import axios from '@/services/axios'
+
+import { useAuth } from '@/composables/useAuth'
 
 interface Category {
   id_category: number
   name: string
 }
 
-const emit = defineEmits<{
-  (event: 'total-changed', total: number): void
-  (event: 'edit', category: Category): void
-  (event: 'view', category: Category): void
+const props = defineProps<{
+  refreshKey?: number
 }>()
 
+const emit = defineEmits<{
+  (e: 'total-changed', total: number): void
+  (e: 'edit', category: Category): void
+  (e: 'view', category: Category): void
+  (e: 'delete', category: Category): void
+}>()
+
+const { isSuperAdmin } = useAuth()
+
 const categories = ref<Category[]>([])
-const loading = ref(true)
 
 const search = ref('')
-const sortBy = ref('newest')
 
-const filteredCategories = computed(() => {
-  let result = [...categories.value]
+const loading = ref(false)
 
-  // Search
-  if (search.value.trim()) {
-    const keyword = search.value.toLowerCase()
-    result = result.filter((category) =>
-      category.name.toLowerCase().includes(keyword)
-    )
-  }
+const errorMessage = ref('')
 
-  // Sort
-  if (sortBy.value === 'newest') {
-    result.sort((a, b) => b.id_category - a.id_category)
-  }
-
-  if (sortBy.value === 'oldest') {
-    result.sort((a, b) => a.id_category - b.id_category)
-  }
-
-  if (sortBy.value === 'name') {
-    result.sort((a, b) => a.name.localeCompare(b.name))
-  }
-
-  return result
-})
-
+/*
+|--------------------------------------------------------------------------
+| Fetch Categories
+|--------------------------------------------------------------------------
+*/
 const fetchCategories = async () => {
-  loading.value = true
-
   try {
-    const response = await axios.get('/api/categories')
-    const data = response.data.data ? response.data.data : response.data
-    categories.value = Array.isArray(data) ? data : []
+    loading.value = true
+    errorMessage.value = ''
 
-    emit('total-changed', categories.value.length)
-  } catch (error) {
-    console.error('Failed to fetch categories:', error)
+    const response = await axios.get('/api/category')
+
+    const data =
+      response.data?.data ??
+      response.data
+
+    categories.value = Array.isArray(data)
+      ? data
+      : []
+
+    emit(
+      'total-changed',
+      categories.value.length,
+    )
+  } catch (error: any) {
+    console.error(
+      'Failed to fetch categories:',
+      error,
+    )
+
+    categories.value = []
+
+    emit('total-changed', 0)
+
+    errorMessage.value =
+      error.response?.data?.message ||
+      'Failed to load categories.'
   } finally {
     loading.value = false
   }
 }
 
-const resetFilters = () => {
-  search.value = ''
-  sortBy.value = 'newest'
-}
+/*
+|--------------------------------------------------------------------------
+| Filter
+|--------------------------------------------------------------------------
+*/
+const filteredCategories = computed(() => {
+  const keyword = search.value
+    .trim()
+    .toLowerCase()
 
-const editCategory = (category: Category) => {
-  emit('edit', category)
-}
+  if (!keyword) {
+    return categories.value
+  }
 
-const viewCategory = (category: Category) => {
-  emit('view', category)
-}
-
-const deleteCategory = async (id: number) => {
-  const confirmed = window.confirm(
-    'Are you sure you want to delete this category?'
+  return categories.value.filter((category) =>
+    category.name
+      .toLowerCase()
+      .includes(keyword),
   )
-
-  if (!confirmed) return
-
-  try {
-    await axios.delete(`/api/categories/${id}`)
-
-    categories.value = categories.value.filter(
-      (category) => category.id_category !== id
-    )
-
-    emit('total-changed', categories.value.length)
-  } catch (error) {
-    console.error('Failed to delete category:', error)
-  }
-}
-
-watch(
-  () => categories.value.length,
-  (total) => {
-    emit('total-changed', total)
-  }
-)
-
-defineExpose({
-  fetchCategories
 })
 
-onMounted(fetchCategories)
+/*
+|--------------------------------------------------------------------------
+| Reset Search
+|--------------------------------------------------------------------------
+*/
+const resetSearch = () => {
+  search.value = ''
+}
+
+/*
+|--------------------------------------------------------------------------
+| Refresh
+|--------------------------------------------------------------------------
+*/
+watch(
+  () => props.refreshKey,
+  () => {
+    fetchCategories()
+  },
+)
+
+/*
+|--------------------------------------------------------------------------
+| Initial Load
+|--------------------------------------------------------------------------
+*/
+onMounted(() => {
+  fetchCategories()
+})
 </script>
+
+<template>
+  <div
+    class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
+  >
+    <!-- Header -->
+    <div
+      class="flex flex-col gap-4 border-b border-gray-200 px-5 py-5 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between sm:px-6"
+    >
+      <div>
+        <h3
+          class="text-base font-semibold text-gray-800 dark:text-white/90"
+        >
+          Category
+        </h3>
+
+        <p
+          class="mt-1 text-sm text-gray-500 dark:text-gray-400"
+        >
+          List of available project categories.
+        </p>
+      </div>
+
+      <!-- Search -->
+      <div
+        class="flex flex-col gap-2 sm:flex-row"
+      >
+        <div class="relative">
+          <input
+            v-model="search"
+            type="text"
+            placeholder="Search category..."
+            class="h-10 w-full rounded-lg border border-gray-300 bg-transparent px-4 pr-10 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-brand-500 focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:text-white/90 dark:placeholder:text-gray-500 sm:w-64"
+          />
+
+          <span
+            class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+          >
+            🔍
+          </span>
+        </div>
+
+        <button
+          type="button"
+          class="h-10 rounded-lg border border-gray-300 px-4 text-sm font-medium text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/[0.03]"
+          @click="resetSearch"
+        >
+          Reset
+        </button>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div
+      v-if="errorMessage"
+      class="mx-5 mt-5 rounded-lg border border-error-200 bg-error-50 px-4 py-3 text-sm text-error-600 dark:border-error-500/30 dark:bg-error-500/10 dark:text-error-400 sm:mx-6"
+    >
+      {{ errorMessage }}
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-[500px]">
+        <thead>
+          <tr
+            class="border-b border-gray-200 dark:border-gray-800"
+          >
+            <th
+              class="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 sm:px-6"
+            >
+              #
+            </th>
+
+            <th
+              class="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400"
+            >
+              Category
+            </th>
+
+            <th
+              class="px-5 py-4 text-right text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 sm:px-6"
+            >
+              Actions
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <!-- Loading -->
+          <tr v-if="loading">
+            <td
+              colspan="3"
+              class="px-5 py-10 text-center text-sm text-gray-500 dark:text-gray-400"
+            >
+              Loading categories...
+            </td>
+          </tr>
+
+          <!-- Empty -->
+          <tr
+            v-else-if="filteredCategories.length === 0"
+          >
+            <td
+              colspan="3"
+              class="px-5 py-10 text-center text-sm text-gray-500 dark:text-gray-400"
+            >
+              {{
+                search
+                  ? 'No category found.'
+                  : 'No categories available.'
+              }}
+            </td>
+          </tr>
+
+          <!-- Data -->
+          <tr
+            v-for="(category, index) in filteredCategories"
+            :key="category.id_category"
+            class="border-b border-gray-100 transition hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-white/[0.02]"
+          >
+            <!-- Number -->
+            <td
+              class="px-5 py-4 text-sm text-gray-500 dark:text-gray-400 sm:px-6"
+            >
+              {{ index + 1 }}
+            </td>
+
+            <!-- Name -->
+            <td
+              class="px-5 py-4 text-base font-semibold text-gray-800 dark:text-white/90"
+            >
+              {{ category.name }}
+            </td>
+
+            <!-- Actions -->
+            <td
+              class="px-5 py-4 sm:px-6"
+            >
+              <div
+                class="flex justify-end gap-2"
+              >
+                <!-- View -->
+                <button
+                  type="button"
+                  title="View"
+                  aria-label="View category"
+                  class="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400"
+                  @click="emit('view', category)"
+                >
+                  👁
+                </button>
+
+                <!-- Edit -->
+                <button
+                  v-if="isSuperAdmin()"
+                  type="button"
+                  title="Edit"
+                  aria-label="Edit category"
+                  class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-400"
+                  @click="emit('edit', category)"
+                >
+                  ✎
+                </button>
+
+                <!-- Delete -->
+                <button
+                  v-if="isSuperAdmin()"
+                  type="button"
+                  title="Delete"
+                  aria-label="Delete category"
+                  class="flex h-9 w-9 items-center justify-center rounded-lg bg-red-50 text-red-600 transition hover:bg-red-100 dark:bg-red-500/10 dark:text-red-400"
+                  @click="emit('delete', category)"
+                >
+                  🗑
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Footer -->
+    <div
+      class="border-t border-gray-200 px-5 py-4 dark:border-gray-800 sm:px-6"
+    >
+      <p
+        class="text-sm text-gray-500 dark:text-gray-400"
+      >
+        Showing
+        <span
+          class="font-medium text-gray-700 dark:text-gray-300"
+        >
+          {{ filteredCategories.length }}
+        </span>
+        of
+        <span
+          class="font-medium text-gray-700 dark:text-gray-300"
+        >
+          {{ categories.length }}
+        </span>
+        categories
+      </p>
+    </div>
+  </div>
+</template>

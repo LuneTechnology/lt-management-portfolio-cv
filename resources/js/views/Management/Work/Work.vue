@@ -36,14 +36,6 @@
             <!-- Title -->
             <div class="flex items-center gap-3">
 
-              <div
-                class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-500/10"
-              >
-                <DocsIcon
-                  class="h-5 w-5 text-blue-500"
-                />
-              </div>
-
               <div>
 
                 <h3
@@ -67,7 +59,7 @@
             <button
               v-if="isSuperAdmin()"
               type="button"
-              class="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white shadow-theme-xs transition hover:bg-brand-600"
+              class="inline-flex items-center justify-center rounded-lg bg-brand-500 px-4 py-3 text-sm font-medium text-white shadow-theme-xs transition hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-60"
               @click="openCreateModal"
             >
               <span class="text-lg leading-none">+</span>
@@ -105,11 +97,11 @@
       >
 
         <div
-          class="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-900"
+          class="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border border-gray-200 bg-white p-6 shadow-xl dark:border-gray-800 dark:bg-gray-900"
         >
 
           <!-- Header -->
-          <div class="flex items-center justify-between">
+          <div class="mb-5 flex items-center justify-between border-b border-gray-200 pb-5 dark:border-gray-800">
 
             <h3
               class="text-lg font-semibold text-gray-800 dark:text-white/90"
@@ -143,7 +135,7 @@
               <input
                 v-model="form.name"
                 type="text"
-                maxlength="255"
+                maxlength="50"
                 placeholder="Example: PT. Molca Teknologi Nusantara"
                 class="h-11 w-full rounded-lg border border-gray-200 bg-white px-4 text-sm text-gray-800 outline-none transition focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
               />
@@ -163,7 +155,7 @@
               <input
                 v-model="form.place"
                 type="text"
-                maxlength="255"
+                maxlength="50"
                 placeholder="Example: Surabaya"
                 class="h-11 w-full rounded-lg border border-gray-200 bg-white px-4 text-sm text-gray-800 outline-none transition focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
               />
@@ -204,6 +196,26 @@
 
             </div>
 
+
+            <!-- Optional Work Image -->
+            <div>
+              <label class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">Image <span class="font-normal text-gray-400">(optional)</span></label>
+              <div class="flex items-center gap-4">
+                <div class="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800">
+                  <img v-if="imagePreview" :src="imagePreview" alt="Work image preview" class="h-full w-full object-cover" />
+                  <span v-else class="text-xs text-gray-400">No image</span>
+                </div>
+                <div class="min-w-0 flex-1">
+                  <input ref="imageInput" type="file" accept="image/jpeg,image/png,image/webp" class="block w-full text-sm text-gray-500 file:mr-3 file:rounded-lg file:border-0 file:bg-gray-100 file:px-3 file:py-2 file:text-sm file:font-medium file:text-gray-700 hover:file:bg-gray-200 dark:file:bg-gray-800 dark:file:text-gray-200" @change="onWorkImageSelected" />
+                  <p class="mt-1 text-xs text-gray-400">JPG, PNG, WebP · maksimal 5 MB. Kosongkan jika tidak ingin mengubah gambar.</p>
+                  <div v-if="selectedImage" class="mt-2 flex items-center gap-2 rounded-lg bg-gray-50 px-3 py-2 dark:bg-gray-800/70">
+                    <span class="text-sm text-gray-600 dark:text-gray-300">{{ selectedImage.name }}</span>
+                    <span class="ml-auto rounded-full bg-brand-50 px-2 py-1 text-[10px] font-semibold text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">Ready to upload</span>
+                  </div>
+                  <button v-if="selectedImage" type="button" class="mt-2 text-xs font-medium text-error-500 hover:text-error-600" @click="clearSelectedImage">Remove selected image</button>
+                </div>
+              </div>
+            </div>
 
             <!-- Error -->
             <p
@@ -258,11 +270,11 @@
       >
 
         <div
-          class="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-900"
+          class="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border border-gray-200 bg-white p-6 shadow-xl dark:border-gray-800 dark:bg-gray-900"
         >
 
           <!-- Header -->
-          <div class="flex items-center justify-between">
+          <div class="mb-5 flex items-center justify-between border-b border-gray-200 pb-5 dark:border-gray-800">
 
             <h3
               class="text-lg font-semibold text-gray-800 dark:text-white/90"
@@ -286,6 +298,10 @@
             v-if="viewingWork"
             class="mt-6 space-y-5"
           >
+
+            <div v-if="viewingWork.image_url" class="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700">
+              <img :src="viewingWork.image_url" :alt="viewingWork.name" class="max-h-56 w-full object-cover" />
+            </div>
 
             <!-- Name -->
             <div>
@@ -376,11 +392,11 @@
       >
 
         <div
-          class="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-900"
+          class="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border border-gray-200 bg-white p-6 shadow-xl dark:border-gray-800 dark:bg-gray-900"
         >
 
           <!-- Header -->
-          <div class="flex items-center justify-between">
+          <div class="mb-5 flex items-center justify-between border-b border-gray-200 pb-5 dark:border-gray-800">
 
             <h3
               class="text-lg font-semibold text-gray-800 dark:text-white/90"
@@ -547,6 +563,9 @@ const form = ref({
   place: '',
   id_work_tag: '' as number | '',
 })
+const imageInput = ref<HTMLInputElement | null>(null)
+const selectedImage = ref<File | null>(null)
+const imagePreview = ref('')
 
 const saving = ref(false)
 
@@ -569,6 +588,31 @@ const deleteError = ref('')
 | Load Work Tags
 |--------------------------------------------------------------------------
 */
+
+const clearSelectedImage = () => {
+  selectedImage.value = null
+  imagePreview.value = editingWork.value?.image_url || ''
+  if (imageInput.value) imageInput.value.value = ''
+}
+
+const onWorkImageSelected = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  if (!file) return
+  if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+    formError.value = 'Image must be JPG, PNG, or WebP.'
+    input.value = ''
+    return
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    formError.value = 'Image size must be 5 MB or less.'
+    input.value = ''
+    return
+  }
+  selectedImage.value = file
+  imagePreview.value = URL.createObjectURL(file)
+  formError.value = ''
+}
 
 const loadWorkTags = async () => {
 
@@ -619,6 +663,9 @@ const openCreateModal = () => {
     place: '',
     id_work_tag: '',
   }
+  selectedImage.value = null
+  imagePreview.value = ''
+  if (imageInput.value) imageInput.value.value = ''
 
   formError.value = ''
 
@@ -646,6 +693,9 @@ const openEditModal = (work: any) => {
     place: work.place,
     id_work_tag: work.id_work_tag,
   }
+  selectedImage.value = null
+  imagePreview.value = work.image_url || ''
+  if (imageInput.value) imageInput.value.value = ''
 
   formError.value = ''
 
@@ -707,6 +757,9 @@ const closeFormModal = () => {
     place: '',
     id_work_tag: '',
   }
+  selectedImage.value = null
+  imagePreview.value = ''
+  if (imageInput.value) imageInput.value.value = ''
 
   formError.value = ''
 
@@ -775,44 +828,17 @@ const saveWork = async () => {
     |--------------------------------------------------------------------------
     */
 
-    const payload = {
-      name: form.value.name.trim(),
-      place: form.value.place.trim(),
-      id_work_tag: Number(
-        form.value.id_work_tag
-      ),
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Update
-    |--------------------------------------------------------------------------
-    */
+    const payload = new FormData()
+    payload.append('name', form.value.name.trim())
+    payload.append('place', form.value.place.trim())
+    payload.append('id_work_tag', String(Number(form.value.id_work_tag)))
+    if (selectedImage.value) payload.append('image', selectedImage.value)
 
     if (editingWork.value) {
-
-      await axios.put(
-        `/api/works/${editingWork.value.id_work}`,
-        payload
-      )
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Create
-    |--------------------------------------------------------------------------
-    */
-
-    else {
-
-      await axios.post(
-        '/api/works',
-        payload
-      )
-
+      payload.append('_method', 'PUT')
+      await axios.post(`/api/works/${editingWork.value.id_work}`, payload)
+    } else {
+      await axios.post('/api/works', payload)
     }
 
 

@@ -2,26 +2,27 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use Illuminate\Database\Seeder;
-use App\Models\Category; // Memastikan Model Category di-import
 
 class CategorySeeder extends Seeder
 {
     public function run(): void
     {
         $categories = [
-            ['name' => 'Web Development'],
-            ['name' => 'Game Development'],
-            ['name' => 'Graphic Design'],
-            ['name' => 'Mobile Development'],
-            ['name' => 'Data & Analytics'],
+            'Web Development',
+            'Game Development',
+            'Digital Twin',
+            'Virtual Reality',
+            'Artificial Intelligence',
+            'Software',
+            'Other',
         ];
 
         foreach ($categories as $category) {
-            Category::firstOrCreate(
-                ['name' => $category['name']],
-                $category
-            );
+            Category::firstOrCreate([
+                'name' => $category,
+            ]);
         }
     }
 }

@@ -23,11 +23,6 @@
             class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
           >
             <div class="flex items-center gap-3">
-              <div
-                class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-500/10"
-              >
-                <DocsIcon class="h-5 w-5 text-blue-500" />
-              </div>
 
               <div>
                 <h3
@@ -45,7 +40,7 @@
             <button
               v-if="isSuperAdmin()"
               type="button"
-              class="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white shadow-theme-xs transition hover:bg-brand-600"
+              class="inline-flex items-center justify-center rounded-lg bg-brand-500 px-4 py-3 text-sm font-medium text-white shadow-theme-xs transition hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-60"
               @click="openCreateModal"
             >
               <span class="text-lg leading-none">+</span>
@@ -73,9 +68,9 @@
         @click.self="closeFormModal"
       >
         <div
-          class="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-900"
+          class="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border border-gray-200 bg-white p-6 shadow-xl dark:border-gray-800 dark:bg-gray-900"
         >
-          <div class="mb-6 flex items-center justify-between">
+          <div class="mb-5 flex items-center justify-between border-b border-gray-200 pb-5 dark:border-gray-800">
             <div>
               <h2
                 class="text-xl font-semibold text-gray-800 dark:text-white"
@@ -162,9 +157,9 @@
         @click.self="showViewModal = false"
       >
         <div
-          class="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-900"
+          class="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border border-gray-200 bg-white p-6 shadow-xl dark:border-gray-800 dark:bg-gray-900"
         >
-          <div class="mb-6 flex items-center justify-between">
+          <div class="mb-5 flex items-center justify-between border-b border-gray-200 pb-5 dark:border-gray-800">
             <h2
               class="text-xl font-semibold text-gray-800 dark:text-white"
             >
@@ -219,7 +214,7 @@
         class="fixed inset-0 z-[99999] flex items-center justify-center bg-black/50 px-4"
       >
         <div
-          class="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-900"
+          class="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border border-gray-200 bg-white p-6 shadow-xl dark:border-gray-800 dark:bg-gray-900"
         >
           <div class="flex items-start gap-4">
             <div

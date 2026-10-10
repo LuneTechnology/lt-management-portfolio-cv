@@ -15,7 +15,7 @@ return new class extends Migration
                 ->constrained('experiences', 'id_experience')
                 ->cascadeOnDelete();
 
-            $table->string('desc', 50);
+            $table->string('desc', 255);
         });
     }
 
